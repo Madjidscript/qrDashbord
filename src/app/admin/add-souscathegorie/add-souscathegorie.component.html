@@ -1,0 +1,105 @@
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+      <div>
+        <h2 class="mb-3 mb-md-0 text-primary">Create Sous-Cathegorie</h2>
+      </div>
+  
+    </div>
+    <hr>
+  
+    <div id="room-creation" class="section" style="margin-top: 5;">
+      <div class="section-center">
+        <div class="container">
+          <div class="row">
+            <div class="booking-form">
+              <div class="form-header">
+                <h6 class="title-centered">Create Sous-Cathegorie</h6>
+              </div>
+  
+              <form  [formGroup]="sousCath"  method="POST"  class="form-groupe" >
+                <div class="row">
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="forme-label" for="nom">Sous-Cathegorie</label>
+                      <input class="form-control" type="text" name="nom" id="nom" placeholder="Enter nom"
+                      formControlName="nom" required>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="forme-label" for="prix"> Prix</label>
+                      <input class="form-control" type="number" name="prix" id="prix"
+                        placeholder="Enter Room price"formControlName="prix" required>
+                    </div>
+                  </div>
+                  
+  
+                  
+
+                  <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                      <label class="form-label" for="id_cath">Catégorie</label>
+                      <select class="form-control" name="id_cath" id="id_cath" formControlName="id_cath"  required>
+                        <option value=""  selected hidden>Select Category</option>
+                        <option *ngFor="let item of data" [value]="item._id"> {{item.nom}} </option>
+                        
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div class="row mb-3">
+                    <label class="form-label" for="image">Sous-Cathegorie Image</label>
+    
+                    <div class="drop-img">
+                      <input type="file" class="dropify" formControlName="image"  data-file-type="image" />
+                    </div>
+                  </div>
+  
+                  
+                </div>
+
+                <div class="form-btn">
+                  <button class="btn btn-danger" type="button"  >cancel</button>
+                  <button type="submit" class="btn btn-light-primary submit-btn" (click)="validation($event)"  >Create Sous-Cathegorie</button>
+                  
+                </div>
+              
+  
+        
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+  
+  
+  
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="successToastBody">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+  
+    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="errorToastBody">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+  

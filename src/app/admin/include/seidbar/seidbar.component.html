@@ -1,0 +1,173 @@
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div>
+      <div class="brand-logo d-flex align-items-center justify-content-between">
+        <a routerLink="/admin/dashboard" class="text-nowrap logo-img">
+          <!-- <img src="./assets/images/logos/logo-goparadize.png" width="180" alt=""> -->
+        </a>
+        <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+          <i class="ti ti-x fs-8"></i>
+        </div>
+      </div>
+      <!-- Sidebar navigation-->
+      <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+        <ul id="sidebarnav">
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <span class="hide-menu">Main</span>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" [routerLink]="['/admin/dashbord']" aria-expanded="false">
+              <span>
+                <i class="ti ti-layout-dashboard"></i> 
+              </span>
+              <span class="hide-menu">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Categories</span> -->
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/addcathegorie" aria-expanded="false">
+              <span>
+                <i class="ti ti-category-2"></i> 
+              </span>
+              <span class="hide-menu">Add-Categories</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Categories</span> -->
+          </li>
+            <!-- <span class="hide-menu">sous categorie</span> -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/addsouscathegorie" aria-expanded="false">
+              <span>
+                <i class="ti ti-category-2"></i> 
+              </span>
+              <span class="hide-menu">Add-Sous-Categories</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Hotels</span> -->
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/addstock" aria-expanded="false">
+              <span>
+                <i class="ti ti-box"></i>
+              </span>
+              <span class="hide-menu">Add-Stock</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Orders</span> -->
+          </li>
+          
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/updatestock" aria-expanded="false">
+              <span>
+                <i class="ti ti-refresh"></i>
+              </span>
+              <span class="hide-menu">update-Stock</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Orders</span> -->
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/stocknbre" aria-expanded="false">
+              <span>
+                <i class="ti ti-list"></i>
+              </span>
+              <span class="hide-menu">liste-Stock</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Orders</span> -->
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/commande" aria-expanded="false">
+              <span>
+                <i class="ti ti-shopping-cart"></i>
+              </span>
+              <span class="hide-menu">Commandes</span>
+            </a>
+          </li>
+
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Users</span> -->
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/cmd-valider" aria-expanded="false">
+              <span>
+                <i class="ti ti-shopping-cart"></i>
+              </span>
+              <span class="hide-menu">Commandes-valider</span>
+            </a>
+          </li>
+          
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Users</span> -->
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/restauxqr" aria-expanded="false">
+              <span>
+                <i class="ti ti-qrcode"></i>
+              </span>
+              <span class="hide-menu">Liste-Qr</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Users</span> -->
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/addAdmin" aria-expanded="false">
+              <span>
+                <i class="ti ti-user"></i> 
+              </span>
+              <span class="hide-menu">Add-Admin</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+            <!-- <span class="hide-menu">Reports</span> -->
+          </li>
+          <!-- <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="/admin/reports" aria-expanded="false">
+              <span>
+                <i class="ti ti-report"></i> 
+              </span>
+              <span class="hide-menu">Reports</span>
+            </a>
+          </li>
+          <li class="nav-small-cap">
+            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+             <span class="hide-menu">Settings</span> 
+          </li> -->
+          <li class="sidebar-item">
+            <a class="sidebar-link" routerLink="" aria-expanded="false">
+              <span>
+                <i class="ti ti-settings"></i> 
+              </span>
+              <span class="hide-menu">General</span>
+            </a>
+          </li>
+        </ul>
+  
+      </nav>
+      <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+  </aside>
+  

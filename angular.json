@@ -23,13 +23,41 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
+                "input": "public",
+                "output": "/assets"
+
+              },
+               "src/assets",
+               "src/favicon"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/dataTables.dataTables.css",
+              "src/assets/css/dataTables.dataTables.css",
+              "src/assets/css/buttons.dataTables.css",
+              "src/assets/vendors/dropify/dist/dropify.min.css",
+              "src/assets/vendors/dropzone/dropzone.min.css"
+
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/jquery-3.7.1.js",
+              "src/assets/vendors/datatables.net/jquery.dataTables.js",
+
+              "src/assets/js/dataTables.js",
+              "src/assets/js/dataTables.buttons.js",
+              "src/assets/js/buttons.dataTables.js",
+              "src/assets/js/jszip.min.js",
+              "src/assets/js/pdfmake.min.js",
+              "src/assets/js/vfs_fonts.js",
+              "src/assets/js/buttons.html5.min.js",
+              "src/assets/js/buttons.print.min.js",
+               
+              "src/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js",
+              "src/assets/js/dropzone.js",
+              "src/assets/js/dropify.js",
+              "src/assets/vendors/dropify/dist/dropify.min.js",
+              "src/assets/vendors/dropzone/dropzone.min.js"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {
@@ -97,5 +125,13 @@
         }
       }
     }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "cli": {
+    "analytics": "f58bd458-1f8f-4a7f-918e-afd8c2ef1b9f"
   }
 }
