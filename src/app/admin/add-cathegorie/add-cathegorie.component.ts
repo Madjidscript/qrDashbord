@@ -1,5 +1,9 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AdminService } from '../../services/admin.service';
+import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+
 
 
 declare const bootstrap: any;
@@ -7,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-add-cathegorie',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './add-cathegorie.component.html',
   styleUrl: './add-cathegorie.component.css'
@@ -17,7 +21,9 @@ export class AddCathegorieComponent implements OnInit{
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   file:File|null = null
-
+  data:any
+  
+  constructor(private api:AdminService){}
   cathegorieData:FormGroup = new FormGroup({
     nom:new FormControl("",Validators.required),
     image:new FormControl(null)
@@ -60,7 +66,56 @@ export class AddCathegorieComponent implements OnInit{
     formData.append("image",this.file as File)
     console.log("mon data1",this.cathegorieData.valid);
     
-    
+    this.api.AddCathe(formData).subscribe({
+      next:(res:any)=> {
+        console.log("ma reponse",res);
+
+        if (res?.status === 'success') {
+         this.data=res
+          
+            
+          Swal.fire({
+            title: 'Success!',
+            text: 'cathegorie enregistrer',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#ff6c2f'
+          }).then(() => {
+            this.cathegorieData.reset()
+            
+          });
+          
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: res?.message || 'cathegorie failed',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+            confirmButtonColor: '#ff6c2f'
+          });
+         
+        }
+        
+      },
+
+      error:(err:any)=> {
+        console.log("mon erreur",err);
+
+        Swal.fire({
+          title: 'Error!',
+          text: err.error_description || 'An error occurred',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+          confirmButtonColor: '#ff6c2f'
+        });
+        
+      },
+      complete:()=> {
+        console.log("mon api youpi");
+        
+        
+      },
+    })
     
   }
 

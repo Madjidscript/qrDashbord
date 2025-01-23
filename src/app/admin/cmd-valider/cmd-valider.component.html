@@ -1,5 +1,11 @@
 
 
+<div class="spinner-container" *ngIf="loading" >
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
       <div>
@@ -18,7 +24,7 @@
                 <h6 class="title-centered">liste Commande valider</h6>
               </div>
 
-              <table>
+              <table *ngIf="!loading">
                 <thead>
                   <tr>
                     <th>Numéro de Table</th>
@@ -28,21 +34,16 @@
                     <th>Plat</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>25 €</td>
+                <tbody  >
+                  <tr *ngFor="let item of data2;let i =index" (click)="nav(item._id)" style="cursor: pointer;"  >
+                    <td> {{i +1}} </td>
+                    <td> {{item.num}} </td>
+                    <td> {{item.total}}Fcfa </td>
                     <td class="status status-valider">Validé</td>
-                    <td><button class="btn btn-cancel">Annuler</button></td>
-                    <td>Pizza</td>
+                   
+                    <td> {{item.data[0].nom}} </td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>30 €</td>
-                    <td class="status status-valider">Validé</td>
-                    <td><button class="btn btn-cancel">Annuler</button></td>
-                    <td>Pâtes</td>
-                  </tr>
+                 
                 </tbody>
               </table>
               

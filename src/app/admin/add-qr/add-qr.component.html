@@ -1,1 +1,79 @@
-<p>add-qr works!</p>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+      <div>
+        <h2 class="mb-3 mb-md-0 text-primary">Create QR</h2>
+      </div>
+  
+    </div>
+    <hr>
+  
+    <div id="room-creation" class="section" style="margin-top: 5;">
+      <div class="section-center">
+        <div class="container">
+          <div class="row">
+            <div class="booking-form">
+              <div class="form-header">
+                <h6 class="title-centered">Create QR</h6>
+              </div>
+  
+              <form    method="POST" [formGroup]="qrdata"  class="form-groupe" >
+                <div class="row">
+
+                  
+
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="forme-label" for="number">Create qr</label>
+                      <input class="form-control" type="number" name="number" id="number"
+                        placeholder="Enter Room price"formControlName="number" required>
+                    </div>
+                  </div>
+                  
+  
+                  
+                </div>
+
+                <div class="form-btn">
+                  <button class="btn btn-danger" type="button"  >cancel</button>
+                  <button type="submit" class="btn btn-light-primary submit-btn" (click)="validation($event)"   >Create Stock</button>
+                  
+                </div>
+              
+  
+        
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+  
+  
+  
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="successToastBody">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+  
+    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="errorToastBody">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+  </div>
+  
+
+

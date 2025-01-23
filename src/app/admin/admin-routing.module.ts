@@ -13,6 +13,7 @@ import { QrRestauxComponent } from './qr-restaux/qr-restaux.component';
 import { DashbordComponent } from './dashbord/dashbord.component';
 import { CmdDetailComponent } from './cmd-detail/cmd-detail.component';
 import { CmdValiderComponent } from './cmd-valider/cmd-valider.component';
+import { AddQrComponent } from './add-qr/add-qr.component';
 
 const routes: Routes = [
   {path:"",component:AdminComponent,
@@ -30,6 +31,7 @@ const routes: Routes = [
       {path:"cmd-detail/:id",component:CmdDetailComponent},
       {path:"cmd-valider",component:CmdValiderComponent},
       {path:"restauxqr",component:QrRestauxComponent},
+      {path:"add-qr",component:AddQrComponent},
     ]
   }
 ];

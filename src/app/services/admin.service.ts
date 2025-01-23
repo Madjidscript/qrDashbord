@@ -17,15 +17,38 @@ export class AdminService {
     return this.http.get(this.api_url+"/admin/commandes", );
   }
 
+  DetailCommande(id:any) {
+    return this.http.get(this.api_url+`/admin/detailcmd/${id}`, );
+  }
+  Editstatut(id:any) {
+    return this.http.get(this.api_url+`/admin/commandes/${id}`, );
+  }
+
   AllCathe() {
     return this.http.get(this.api_url+"/admin/cathegories", );
+  }
+
+  AddCathe(body:any) {
+    return this.http.post(this.api_url+"/admin/cathegories",body);
   }
 
   AllSousCathe() {
     return this.http.get(this.api_url+"/admin/souscathegories", );
   }
+
+  AddSousCathe(body:any) {
+    return this.http.post(this.api_url+"/admin/souscathegories",body);
+  }
   AllStock() {
     return this.http.get(this.api_url+"/admin/stocks", );
+  }
+  
+  AddStock(body:any) {
+    return this.http.post(this.api_url+"/admin/stocks",body);
+  }
+
+  UpdateStock(body:any) {
+    return this.http.post(this.api_url+"/admin/stockUpdates",body);
   }
 
   AllQr() {

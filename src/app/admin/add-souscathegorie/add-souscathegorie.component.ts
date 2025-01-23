@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
+
 
 
 declare const bootstrap: any;
@@ -90,6 +92,58 @@ export class AddSouscathegorieComponent implements OnInit {
 
     if(this.sousCath.valid){
       console.log("mon data",this.sousCath.value,"mon file",this.file);
+
+      this.api.AddSousCathe(formData).subscribe({
+        next:(res:any)=> {
+          console.log("ma reponse",res);
+  
+          if (res?.status === 'success') {
+           this.data=res
+            
+              
+            Swal.fire({
+              title: 'Success!',
+              text: 'souscathegorie enregistrer',
+              icon: 'success',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#ff6c2f'
+            }).then(() => {
+              this.sousCath.reset()
+              
+            });
+            
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: res?.message || 'souscathegorie failed',
+              icon: 'error',
+              confirmButtonText: 'Try Again',
+              confirmButtonColor: '#ff6c2f'
+            });
+           
+          }
+          
+        },
+  
+        error:(err:any)=> {
+          console.log("mon erreur",err);
+  
+          Swal.fire({
+            title: 'Error!',
+            text: err.error_description || 'An error occurred',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+            confirmButtonColor: '#ff6c2f'
+          });
+          
+        },
+        complete:()=> {
+          console.log("mon api youpi");
+          
+          
+        },
+      })
+      
 
       
     }
