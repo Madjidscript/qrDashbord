@@ -55,6 +55,10 @@ export class AdminService {
     return this.http.get(this.api_url+"/admin/qrcode", );
   }
 
+  coubre() {
+    return this.http.get(this.api_url+"/admin/coubre", );
+  }
+
   AddQr(body:any) {
     return this.http.post(this.api_url+"/admin/qrcode",body);
   }
