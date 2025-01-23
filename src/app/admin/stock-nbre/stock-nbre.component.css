@@ -295,3 +295,25 @@ h2.text-primary {
 .btn-delete:hover {
   background-color: #e53935;
 }
+
+
+.card{
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond avec opacité */
+  z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+}

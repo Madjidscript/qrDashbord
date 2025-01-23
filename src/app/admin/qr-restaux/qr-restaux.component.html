@@ -1,4 +1,9 @@
 
+<div class="spinner-container" *ngIf="loading" >
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
@@ -18,7 +23,7 @@
                 <h6 class="title-centered">liste Qr</h6>
               </div>
 
-              <div class="qr-container" >
+              <div class="qr-container" *ngIf="!loading" >
                 <!-- QR Code 1 -->
                 <div class="qr-card" *ngFor="let item of data">
                   <div class="qr-number" style="margin-bottom: 25px;">{{item.number}} </div>

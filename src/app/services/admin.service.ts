@@ -54,4 +54,9 @@ export class AdminService {
   AllQr() {
     return this.http.get(this.api_url+"/admin/qrcode", );
   }
+
+  AddQr(body:any) {
+    return this.http.post(this.api_url+"/admin/qrcode",body);
+  }
+
 }

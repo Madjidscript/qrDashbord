@@ -16,6 +16,8 @@ declare var $: any;
 export class StockNbreComponent implements OnInit {
 
   data:any
+  loading=false
+
   constructor(private api:AdminService,private router:Router){}
   ngOnInit(){
     this.datatable()
@@ -27,6 +29,7 @@ export class StockNbreComponent implements OnInit {
   }
 
   getallstock(){
+    this.loading=true
     this.api.AllStock().subscribe({
      
         next:(res:any)=> {
@@ -46,10 +49,12 @@ export class StockNbreComponent implements OnInit {
         },
         error:(err:any)=> {
           console.log("mon erreur",err);
+          this.loading=false
           
         },
-        complete() {
+        complete:()=> {
           console.log("mon api youpi");
+          this.loading=false
         },
       
     })

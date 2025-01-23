@@ -11,11 +11,13 @@ import { CommonModule } from '@angular/common';
 })
 export class QrRestauxComponent implements OnInit {
   data:any
+  loading:boolean=false
   constructor(private api:AdminService){}
   ngOnInit() {
     this.getallqr()
   }
   getallqr(){
+    this.loading=true
     this.api.AllQr().subscribe({
       next:(res:any)=> {
         
@@ -24,10 +26,13 @@ export class QrRestauxComponent implements OnInit {
       },
       error:(err:any)=> {
         console.log("mon erreur",err);
+        this.loading=false
         
       },
-      complete() {
+      complete:()=> {
         console.log("mon api youpi");
+        this.loading=false
+
       },
 
     })
