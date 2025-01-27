@@ -38,15 +38,16 @@ export class CommandeComponent implements OnInit {
         console.log("mais commande",res);
 
         setTimeout(() => {
-          $('table').DataTable(
-            {
+          if (typeof $ !== 'undefined') {
+            $('table').DataTable({
               dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
-              buttons: [
-                  'copy', 'csv', 'excel', 'pdf', 'print'
-              ]
-            }
-          )
-        }, 200);
+                          buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+            console.log('jQuery is  availables');
+          } else {
+            console.log('jQuery is not availables');
+          }
+      } , 200);
       },
       error:(err:any)=> {
         console.log("mon erreur",err);

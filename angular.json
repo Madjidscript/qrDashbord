@@ -35,13 +35,15 @@
             "styles": [
               "src/styles.css",
               "src/assets/css/dataTables.dataTables.css",
-              "src/assets/css/dataTables.dataTables.css",
               "src/assets/css/buttons.dataTables.css",
               "src/assets/vendors/dropify/dist/dropify.min.css",
-              "src/assets/vendors/dropzone/dropzone.min.css"
+              "src/assets/vendors/dropzone/dropzone.min.css",
+              "src/assets/vendors/select2/select2.min.css",
+              "src/assets/libs/simplebar/dist/simplebar.css"
 
             ],
             "scripts": [
+              "src/assets/js/jquery-3.7.1.min.js",
               "src/assets/js/jquery-3.7.1.js", 
               "src/assets/vendors/datatables.net/jquery.dataTables.js",
               "src/assets/js/dataTables.js",
@@ -53,6 +55,8 @@
               "src/assets/js/buttons.html5.min.js",
               "src/assets/js/buttons.print.min.js",
               "src/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js",
+              "src/assets/js/select2.js",
+              "src/assets/vendors/select2/select2.min.js",
               "src/assets/vendors/dropzone/dropzone.min.js",
               "src/assets/js/dropzone.js",
               "src/assets/vendors/dropify/dist/dropify.min.js",

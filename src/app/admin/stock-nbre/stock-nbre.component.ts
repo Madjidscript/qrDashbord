@@ -21,13 +21,20 @@ export class StockNbreComponent implements OnInit {
 
   constructor(private api:AdminService,private router:Router){}
   ngOnInit(){
-    this.datatable()
-    console.log("ma page hooo");
+    console.log("")
+    if (typeof $ !== 'undefined') {
+      console.log('jQuery is loaded');
+    } else {
+      console.log('jQuery is not loaded');
+    }
+    this.getallstock();
+    console.log("ma page hooo",$);
     
   }
-  datatable(){
-   this.getallstock()
-  }
+
+  // datatable(){
+  //  this.getallstock()
+  // }
 
   getallstock(){
     this.loading=true
@@ -38,21 +45,22 @@ export class StockNbreComponent implements OnInit {
           console.log("mais stock",this.data);
 
           setTimeout(() => {
-            $('table').DataTable(
-              {
-                dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+              if (typeof $ !== 'undefined') {
+                $('table').DataTable({
+                  dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
+                              buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                });
+                console.log('jQuery is  availables');
+              } else {
+                console.log('jQuery is not availables');
               }
-            )
-          }, 200);
-        },
+          } , 200);
+          },
         error:(err:any)=> {
-          console.log("mon erreur",err);
-          this.loading=false
-          
-        },
+         console.log("mon erreur",err);
+         this.loading=false
+                
+              },
         complete:()=> {
           console.log("mon api youpi");
           this.loading=false
