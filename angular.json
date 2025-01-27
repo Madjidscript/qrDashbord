@@ -6,6 +6,7 @@
     "dashbord": {
       "projectType": "application",
       "schematics": {},
+      
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -40,9 +41,8 @@
 
             ],
             "scripts": [
-              "src/assets/js/jquery-3.7.1.js",
+              "src/assets/js/jquery-3.7.1.js", 
               "src/assets/vendors/datatables.net/jquery.dataTables.js",
-
               "src/assets/js/dataTables.js",
               "src/assets/js/dataTables.buttons.js",
               "src/assets/js/buttons.dataTables.js",
@@ -51,12 +51,11 @@
               "src/assets/js/vfs_fonts.js",
               "src/assets/js/buttons.html5.min.js",
               "src/assets/js/buttons.print.min.js",
-               
               "src/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js",
+              "src/assets/vendors/dropzone/dropzone.min.js",
               "src/assets/js/dropzone.js",
-              "src/assets/js/dropify.js",
               "src/assets/vendors/dropify/dist/dropify.min.js",
-              "src/assets/vendors/dropzone/dropzone.min.js"
+              "src/assets/js/dropify.js"
             ],
             "server": "src/main.server.ts",
             "prerender": true,

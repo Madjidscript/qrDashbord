@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { log } from 'util';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-cmd-detail',
@@ -33,15 +33,18 @@ export class CmdDetailComponent implements OnInit {
     this.api.DetailCommande(this.id).subscribe({
       next:(res:any)=> {
         console.log("mon data",res);
-        this.data = res
-        this.plat = res.data
-        this.alergit = res.alergit
-        this.statut2 = res.statut
+        this.data = res.commandes
+        this.plat = res.commandes.data
+        this.alergit = res.commandes.alergit
+        this.statut2 = res.commandes.statut
+        
         
       },
       error:(err:any)=> {
         console.log("mon erreur",err);
         this.loading=false
+
+        
 
         
       },
@@ -62,13 +65,43 @@ export class CmdDetailComponent implements OnInit {
 
     this.api.Editstatut(this.id).subscribe({
       next:(res:any)=> {
-        console.log("mon data",res);
+        console.log("mons data",res);
         this.statut = res
+
+        if (res?.status === 'success') {
+          Swal.fire({
+            title: 'Success!',
+            text: 'commende valider',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#ff6c2f'
+          }).then(() => {
+            this.router.navigate(["/admin/cmd-valider"])
+          });
+          
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: res?.message || 'commende non valider',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+            confirmButtonColor: '#ff6c2f'
+          });
+         
+        }
         
         
       },
       error:(err:any)=> {
         console.log("mon erreur",err);
+
+        Swal.fire({
+          title: 'Error!',
+          text: err.error_description || 'An error occurred',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+          confirmButtonColor: '#ff6c2f'
+        });
         
       },
       complete:()=> {
