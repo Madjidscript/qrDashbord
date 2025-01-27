@@ -1,6 +1,12 @@
 
-  {
-    "routes": [
-      { "src": "/.*", "dest": "/index.html" }
-    ]
-  }
+{
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/angular",
+      "config": {
+        "maxDuration": 300 
+      }
+    }
+  ]
+}
