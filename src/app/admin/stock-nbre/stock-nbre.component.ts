@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 declare const feather: any;
 declare var $: any;
+
 @Component({
   selector: 'app-stock-nbre',
   standalone: true,
