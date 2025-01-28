@@ -21,6 +21,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.7",
+    "@sweetalert2/ngx-sweetalert2": "^13.0.0",
     "chart.js": "^4.4.7",
     "datatables.net": "^2.2.1",
     "datatables.net-dt": "^2.2.1",
@@ -31,7 +32,7 @@
     "jszip": "^3.10.1",
     "pdfmake": "^0.2.18",
     "rxjs": "~7.8.0",
-    "sweetalert2": "^11.6.13",
+    "sweetalert2": "^11.15.10",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },
