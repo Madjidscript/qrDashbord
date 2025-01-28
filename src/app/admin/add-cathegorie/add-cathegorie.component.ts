@@ -4,102 +4,119 @@ import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
-
-
 declare const bootstrap: any;
 declare var $: any;
+
 @Component({
   selector: 'app-add-cathegorie',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './add-cathegorie.component.html',
-  styleUrl: './add-cathegorie.component.css'
+  styleUrls: ['./add-cathegorie.component.css']
 })
-export class AddCathegorieComponent implements OnInit{
+export class AddCathegorieComponent implements OnInit {
   @ViewChild('preview') previewImage!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  file:File|null = null
-  data:any
-  
-  constructor(private api:AdminService){}
-  cathegorieData:FormGroup = new FormGroup({
-    nom:new FormControl("",Validators.required),
-    image:new FormControl(null)
-  })
-  ngOnInit() {
-    
-  }
+  file: File | null = null;
+  data: any;
+
+  constructor(private api: AdminService) { }
+
+  cathegorieData: FormGroup = new FormGroup({
+    nom: new FormControl("", Validators.required),
+    image: new FormControl(null)
+  });
+
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
-    $('.dropify').dropify();
-  
-    $('.dropify').on('change', (event: any) => {
-      this.onFileChange(event);
-    });
+    if (typeof $ !== 'undefined') {
+      $('.dropify').dropify();
+      $('.dropify').on('change', (event: any) => {
+        this.onFileChange(event);
+      });
+    }
 
-     console.log('File input initialized:', this.fileInput);
+    console.log('File input initialized:', this.fileInput);
   }
 
   openFileInput() {
     if (this.fileInput) {
-      this.fileInput.nativeElement.click(); 
+      this.fileInput.nativeElement.click();
     } else {
       console.error('fileInput is not available yet');
     }
   }
 
- 
   onFileChange(event: any) {
     console.log(event);
     let file = event.target.files[0];
-    this.file = file;
-    return file;
+    if (file) {
+      this.file = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (this.previewImage) {
+          this.previewImage.nativeElement.src = reader.result as string;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
-  validation(event:Event){
-    event.preventDefault()
+  validation(event: Event) {
+    event.preventDefault();
 
-    const formData:FormData = new FormData()
-    formData.append("nom",this.cathegorieData.get("nom")?.value)
-    formData.append("image",this.file as File)
-    console.log("mon data1",this.cathegorieData.valid);
-    
+    if (this.cathegorieData.invalid || !this.file) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Please fill in all required fields and select an image.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#ff6c2f'
+      });
+      return;
+    }
+
+    const formData: FormData = new FormData();
+    formData.append("nom", this.cathegorieData.get("nom")?.value);
+    formData.append("image", this.file as File);
+
+    console.log("Form validation status:", this.cathegorieData.valid);
+
     this.api.AddCathe(formData).subscribe({
-      next:(res:any)=> {
-        console.log("ma reponse",res);
+      next: (res: any) => {
+        console.log("Response:", res);
 
         if (res?.status === 'success') {
-         this.data=res
-          
-            
+          this.data = res;
+
           Swal.fire({
             title: 'Success!',
-            text: 'cathegorie enregistrer',
+            text: 'Category successfully registered',
             icon: 'success',
             confirmButtonText: 'OK',
             confirmButtonColor: '#ff6c2f'
           }).then(() => {
-            this.cathegorieData.reset()
-            
+            this.cathegorieData.reset();
+            this.file = null;
+            this.previewImage.nativeElement.src = ''; // Reset the preview image
           });
-          
+
         } else {
           Swal.fire({
             title: 'Error!',
-            text: res?.message || 'cathegorie failed',
+            text: res?.message || 'Category registration failed',
             icon: 'error',
             confirmButtonText: 'Try Again',
             confirmButtonColor: '#ff6c2f'
           });
-         
         }
-        
       },
 
-      error:(err:any)=> {
-        console.log("mon erreur",err);
+      error: (err: any) => {
+        console.log("Error:", err);
 
         Swal.fire({
           title: 'Error!',
@@ -108,15 +125,11 @@ export class AddCathegorieComponent implements OnInit{
           confirmButtonText: 'Try Again',
           confirmButtonColor: '#ff6c2f'
         });
-        
       },
-      complete:()=> {
-        console.log("mon api youpi");
-        
-        
-      },
-    })
-    
-  }
 
+      complete: () => {
+        console.log("API request completed");
+      }
+    });
+  }
 }
