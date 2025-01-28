@@ -30,15 +30,21 @@ export class CmdValiderComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.getallcmd();
-    console.log("ma page hooo");
+    console.log("Composant Commande Valider initialisé.");
   }
 
   // Initialisation de DataTables après le rendu de la vue
   ngAfterViewInit() {
-    if (this.isBrowser && typeof $ !== 'undefined') {
-      setTimeout(() => {
-        this.initDataTables();
-      }, 200); // Petit délai pour garantir que les données sont chargées
+    if (this.isBrowser) {
+      // Vérifie si jQuery est bien chargé
+      if (typeof $ !== 'undefined') {
+        console.log('jQuery est chargé et prêt à être utilisé.');
+        setTimeout(() => {
+          this.initDataTables();
+        }, 200); // Petit délai pour garantir que les données sont chargées
+      } else {
+        console.error('jQuery n\'est pas chargé.');
+      }
     }
   }
 
@@ -62,22 +68,27 @@ export class CmdValiderComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         this.data = res;
         this.data2 = this.data.filter((item: any) => item.statut == false);
-        console.log("mais commande", res);
+        console.log('Commandes récupérées:', res);
+
         if (this.isBrowser && typeof $ !== 'undefined') {
-          // Réinitialiser DataTables après mise à jour des données
-          setTimeout(() => {
-            this.initDataTables();
-          }, 200);
+          // Vérifie à nouveau si jQuery est chargé avant de réinitialiser DataTables
+          if (typeof $ !== 'undefined') {
+            setTimeout(() => {
+              this.initDataTables();
+            }, 200); // Petit délai pour garantir que DataTables est réinitialisé après mise à jour des données
+          } else {
+            console.error('jQuery n\'est pas disponible pour réinitialiser DataTables.');
+          }
         }
       },
       error: (err: any) => {
-        console.log("mon erreur", err);
+        console.error('Erreur lors de la récupération des commandes :', err);
         this.loading = false;
       },
       complete: () => {
-        console.log("mon api youpi");
+        console.log('Requête API terminée.');
         this.loading = false;
-      },
+      }
     });
   }
 

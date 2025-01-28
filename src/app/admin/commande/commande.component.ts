@@ -35,10 +35,16 @@ export class CommandeComponent implements OnInit, AfterViewInit {
 
   // Initialisation après le rendu de la vue
   ngAfterViewInit() {
-    if (this.isBrowser && typeof $ !== 'undefined') {
-      setTimeout(() => {
-        this.initDataTables();
-      }, 200); // Petit délai pour garantir le rendu complet
+    if (this.isBrowser) {
+      // Vérifie si jQuery est chargé
+      if (typeof $ !== 'undefined') {
+        console.log('jQuery est chargé et prêt à être utilisé.');
+        setTimeout(() => {
+          this.initDataTables();
+        }, 200); // Petit délai pour garantir le rendu complet
+      } else {
+        console.error('jQuery n\'est pas chargé.');
+      }
     }
   }
 
