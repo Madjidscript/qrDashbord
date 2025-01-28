@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 declare var $: any;
 
 @Component({
@@ -10,6 +11,10 @@ declare var $: any;
   styleUrl: './seidbar.component.css'
 })
 export class SeidbarComponent implements OnInit {
+
+  ngOnInit() {
+    this.Activate()
+   }
 
   
 
@@ -76,8 +81,6 @@ export class SeidbarComponent implements OnInit {
     });
      }
   }
-  ngOnInit() {
-   this.Activate()
-  }
+  
 
 }
