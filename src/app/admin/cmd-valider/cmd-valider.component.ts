@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ declare var $: any;
   templateUrl: './cmd-valider.component.html',
   styleUrls: ['./cmd-valider.component.scss']
 })
-export class CmdValiderComponent implements OnInit {
+export class CmdValiderComponent implements OnInit, AfterViewInit {
   data: any;
   data2: any;
   loading = false;
@@ -33,6 +33,28 @@ export class CmdValiderComponent implements OnInit {
     console.log("ma page hooo");
   }
 
+  // Initialisation de DataTables après le rendu de la vue
+  ngAfterViewInit() {
+    if (this.isBrowser && typeof $ !== 'undefined') {
+      setTimeout(() => {
+        this.initDataTables();
+      }, 200); // Petit délai pour garantir que les données sont chargées
+    }
+  }
+
+  // Fonction pour configurer DataTables
+  initDataTables() {
+    const table = $('table');
+    if (table.hasClass('dataTable')) {
+      table.DataTable().destroy(); // Détruire une instance existante
+    }
+    table.DataTable({
+      dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
+      buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+    });
+    console.log('DataTables initialisé');
+  }
+
   getallcmd() {
     this.loading = true;
 
@@ -41,22 +63,11 @@ export class CmdValiderComponent implements OnInit {
         this.data = res;
         this.data2 = this.data.filter((item: any) => item.statut == false);
         console.log("mais commande", res);
-
-        // Initialisation de DataTables uniquement si côté navigateur
         if (this.isBrowser && typeof $ !== 'undefined') {
+          // Réinitialiser DataTables après mise à jour des données
           setTimeout(() => {
-            const table = $('table');
-            if (table.hasClass('dataTable')) {
-              table.DataTable().destroy(); // Détruit une ancienne instance si elle existe
-            }
-            table.DataTable({
-              dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
-              buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-            });
-            console.log('DataTables initialisé');
+            this.initDataTables();
           }, 200);
-        } else {
-          console.log('jQuery ou DataTables non disponible');
         }
       },
       error: (err: any) => {

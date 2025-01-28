@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,9 +13,9 @@ declare var $: any;
   templateUrl: './commande.component.html',
   styleUrls: ['./commande.component.css']
 })
-export class CommandeComponent implements OnInit {
-  data: any;
-  data2: any;
+export class CommandeComponent implements OnInit, AfterViewInit {
+  data: any = [];
+  data2: any = [];
   loading = false;
   isBrowser: boolean;
 
@@ -24,47 +24,61 @@ export class CommandeComponent implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: any
   ) {
-    // Vérification si l'environnement est un navigateur
+    // Vérifie si l'environnement est un navigateur
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
     this.getallcmd();
-    console.log("ma page hooo");
+    console.log('Composant Commande initialisé.');
+  }
+
+  // Initialisation après le rendu de la vue
+  ngAfterViewInit() {
+    if (this.isBrowser && typeof $ !== 'undefined') {
+      setTimeout(() => {
+        this.initDataTables();
+      }, 200); // Petit délai pour garantir le rendu complet
+    }
+  }
+
+  // Fonction pour initialiser DataTables
+  initDataTables() {
+    const table = $('table');
+    if (table.hasClass('dataTable')) {
+      table.DataTable().destroy(); // Détruire une instance existante
+    }
+    table.DataTable({
+      dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
+      buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+    });
+    console.log('DataTables initialisé avec succès.');
   }
 
   getallcmd() {
     this.loading = true;
+
     this.api.AllCommande().subscribe({
       next: (res: any) => {
         this.data = res;
-        this.data2 = this.data.filter((item: any) => item.statut == true);
-        console.log("mais commande", res);
+        this.data2 = this.data.filter((item: any) => item.statut === true);
+        console.log('Commandes récupérées :', res);
 
+        // Réinitialiser DataTables après réception des données
         if (this.isBrowser && typeof $ !== 'undefined') {
           setTimeout(() => {
-            const table = $('table');
-            if (table.hasClass('dataTable')) {
-              table.DataTable().destroy(); // Détruire une ancienne instance si elle existe
-            }
-            table.DataTable({
-              dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
-              buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-            });
-            console.log('DataTables initialisé');
+            this.initDataTables();
           }, 200);
-        } else {
-          console.log('jQuery ou DataTables non disponible');
         }
       },
       error: (err: any) => {
-        console.log("mon erreur", err);
+        console.error('Erreur lors de la récupération des commandes :', err);
         this.loading = false;
       },
       complete: () => {
-        console.log("mon api youpi");
+        console.log('Requête API terminée.');
         this.loading = false;
-      },
+      }
     });
   }
 
