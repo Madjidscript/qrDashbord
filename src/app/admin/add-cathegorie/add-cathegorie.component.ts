@@ -4,6 +4,7 @@ import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
+
 declare const bootstrap: any;
 declare var $: any;
 
