@@ -7,8 +7,7 @@
     "types": [
       "node"
     ],
-    "module": "ESNext",  // Ajoute cette ligne
-    "target": "ESNext"   // Ajoute cette ligne
+    
   },
   "files": [
     "src/main.ts",
