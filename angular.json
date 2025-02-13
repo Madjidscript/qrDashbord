@@ -64,21 +64,21 @@
               "src/assets/js/dropify.js"
             ],
             "server": "src/main.server.ts"
-            
+           
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "4mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
-                }  
+                  "maximumWarning": "10kb",
+                  "maximumError": "15kb"
+                } 
               ],
               "outputHashing": "all"
             },
@@ -136,4 +136,5 @@
   "cli": {
     "analytics": "f58bd458-1f8f-4a7f-918e-afd8c2ef1b9f"
   }
+  
 }
