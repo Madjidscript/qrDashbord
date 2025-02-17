@@ -27,17 +27,15 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public",
-                "output": "/assets"
-
+                "input": "src/assets",
+                "output": "assets"
               },
-               "src/assets",
-               "src/favicon"
+              "src/favicon"
             ],
             "styles": [
+              
               "src/styles.css",
-              "src/assets/css/styles.css",
-             
+            
               "src/assets/css/dataTables.dataTables.css",
               "src/assets/css/buttons.dataTables.css",
               "src/assets/vendors/dropify/dist/dropify.min.css",
