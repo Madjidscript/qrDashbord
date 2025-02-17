@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import Swal from 'sweetalert2'
 
+
+declare const bootstrap: any;
+declare var $: any;
 @Component({
   selector: 'app-cmd-detail',
   standalone: true,
@@ -69,39 +71,16 @@ export class CmdDetailComponent implements OnInit {
         this.statut = res
 
         if (res?.status === 'success') {
-          Swal.fire({
-            title: 'Success!',
-            text: 'commende valider',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#ff6c2f'
-          }).then(() => {
-            this.router.navigate(["/admin/cmd-valider"])
-          });
+         this.showSuccessToast("commande valier")
           
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: res?.message || 'commende non valider',
-            icon: 'error',
-            confirmButtonText: 'Try Again',
-            confirmButtonColor: '#ff6c2f'
-          });
+        } 
          
-        }
-        
-        
+  
       },
       error:(err:any)=> {
         console.log("mon erreur",err);
-
-        Swal.fire({
-          title: 'Error!',
-          text: err.error_description || 'An error occurred',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ff6c2f'
-        });
+       this.showErrorToast("erreur de validation")
+        
         
       },
       complete:()=> {
@@ -115,5 +94,38 @@ export class CmdDetailComponent implements OnInit {
   nav(){
     this.router.navigate(["/admin/commande"])
   }
+
+
+
+
+  //  fonction pour les toast
+
+  showSuccessToast(message: string) {
+    const toastBody = document.getElementById('successToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+      
+    } else {
+        console.warn('Success toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('successToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    toast.show();
+  }
+  
+  showErrorToast(message: string) {
+    const toastBody = document.getElementById('errorToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+    } else {
+        console.warn('Error toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('errorToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
+  }
+
 
 }
