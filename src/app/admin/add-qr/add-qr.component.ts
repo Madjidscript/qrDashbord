@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
-import Swal from 'sweetalert2';
 
+
+
+declare const bootstrap: any;
+declare var $: any;
 @Component({
   selector: 'app-add-qr',
   standalone: true,
@@ -29,42 +32,16 @@ export class AddQrComponent implements OnInit {
 
         if (res?.status === 'success') {
          this.data=res
+         this.showSuccessToast("creation des qr validée")
           
-            
-          Swal.fire({
-            title: 'Success!',
-            text: 'stock update enregistrer',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#ff6c2f'
-          }).then(() => {
-            this.qrdata.reset()
-            
-          });
-          
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: res?.message || 'stock update failed',
-            icon: 'error',
-            confirmButtonText: 'Try Again',
-            confirmButtonColor: '#ff6c2f'
-          });
-         
-        }
-        
-      },
+        } 
+   
+       },
 
       error:(err:any)=> {
         console.log("mon erreur",err);
-
-        Swal.fire({
-          title: 'Error!',
-          text: err.error_description || 'An error occurred',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ff6c2f'
-        });
+       this.showSuccessToast("creation des qr echouer")
+        
         
       },
       complete:()=> {
@@ -75,5 +52,39 @@ export class AddQrComponent implements OnInit {
     })
     
   }
+
+
+
+
+
+  //  fonction pour les toast
+
+  showSuccessToast(message: string) {
+    const toastBody = document.getElementById('successToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+        this.qrdata.reset()
+    } else {
+        console.warn('Success toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('successToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    toast.show();
+  }
+  
+  showErrorToast(message: string) {
+    const toastBody = document.getElementById('errorToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+    } else {
+        console.warn('Error toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('errorToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
+  }
+  
 
 }

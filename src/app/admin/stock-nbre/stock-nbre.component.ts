@@ -78,7 +78,7 @@ export class StockNbreComponent implements OnInit {
     }
   }
 
-  nav(): void {
-    this.router.navigate(['/admin/updatestock']);
+  nav(name:any): void {
+    this.router.navigate([`/admin/updatestock/${name}`]);
   }
 }

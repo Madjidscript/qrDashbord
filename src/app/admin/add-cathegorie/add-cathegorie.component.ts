@@ -68,10 +68,10 @@ export class AddCathegorieComponent implements OnInit {
   }
 
   validation(event: Event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     if (this.cathegorieData.invalid || !this.file) {
-      this.showErrorToast('Please fill in all required fields and select an image.')
+      this.showErrorToast("selectionner une image")
       return;
     }
 
@@ -86,15 +86,15 @@ export class AddCathegorieComponent implements OnInit {
         console.log("Response:", res);
 
         if (res?.status === 'success') {
-          this.data = res;
-          this.showSuccessToast('categorie created successfully!');  
-        }
+          this.data = res    
+          this.showSuccessToast("cathegorie creer avec success")
+        } 
      },
 
       error: (err: any) => {
         console.log("Error:", err);
-        this.showErrorToast('Failed to create cathegorie.');
-        
+        this.showErrorToast("erreur lors de la creation")
+       
       },
 
       complete: () => {
@@ -110,6 +110,7 @@ export class AddCathegorieComponent implements OnInit {
     const toastBody = document.getElementById('successToastBody');
     if (toastBody) { 
         toastBody.textContent = message; 
+        this.cathegorieData.reset()
     } else {
         console.warn('Success toast body element not found.');
     }
@@ -128,7 +129,7 @@ export class AddCathegorieComponent implements OnInit {
     }
     
     const toastElement = document.getElementById('errorToast');
-    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
     toast.show();
   }
   

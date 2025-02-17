@@ -2,7 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild } from
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
-import Swal from 'sweetalert2';
+
 
 declare const bootstrap: any;
 declare var $: any;
@@ -88,13 +88,7 @@ export class AddSouscathegorieComponent implements OnInit {
     event.preventDefault();
 
     if (this.sousCathegorieData.invalid || !this.file) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Please fill in all required fields and select an image.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#ff6c2f'
-      });
+        
       return;
     }
 
@@ -113,39 +107,13 @@ export class AddSouscathegorieComponent implements OnInit {
         if (res?.status === 'success') {
           this.data = res;
 
-          Swal.fire({
-            title: 'Success!',
-            text: 'Sous-categorie successfully registered',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#ff6c2f'
-          }).then(() => {
-            this.sousCathegorieData.reset();
-            this.file = null;
-            this.previewImage.nativeElement.src = ''; // Reset the preview image
-          });
+          this.showSuccessToast("creation de souscath valider")
 
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: res?.message || 'Sous-categorie registration failed',
-            icon: 'error',
-            confirmButtonText: 'Try Again',
-            confirmButtonColor: '#ff6c2f'
-          });
         }
       },
 
       error: (err: any) => {
-        console.log("Error:", err);
-
-        Swal.fire({
-          title: 'Error!',
-          text: err.error_description || 'An error occurred',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ff6c2f'
-        });
+       this.showErrorToast("erreur lor de la creation de soucath")
       },
 
       complete: () => {
@@ -153,4 +121,43 @@ export class AddSouscathegorieComponent implements OnInit {
       }
     });
   }
+
+
+
+
+
+
+
+
+
+
+   //  fonction pour les toast
+
+   showSuccessToast(message: string) {
+    const toastBody = document.getElementById('successToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+        this.sousCathegorieData.reset()
+    } else {
+        console.warn('Success toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('successToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    toast.show();
+  }
+  
+  showErrorToast(message: string) {
+    const toastBody = document.getElementById('errorToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+    } else {
+        console.warn('Error toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('errorToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
+  }
+  
 }

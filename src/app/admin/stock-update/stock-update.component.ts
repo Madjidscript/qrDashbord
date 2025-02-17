@@ -2,9 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
-import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 
+
+
+declare const bootstrap: any;
+declare var $: any;
 @Component({
   selector: 'app-stock-update',
   standalone: true,
@@ -14,12 +18,14 @@ import Swal from 'sweetalert2';
 })
 export class StockUpdateComponent {
   data:any
+  name:any
   stockData:FormGroup= new FormGroup({
     nombre: new FormControl("",Validators.required),
     id_Souscat: new FormControl("",Validators.required)
   })
-  constructor(private api:AdminService){}
+  constructor(private api:AdminService, private activate:ActivatedRoute){}
   ngOnInit() {
+    this.name = this.activate.snapshot.paramMap.get("name")
     this.getallsouscath()
   }
   getallsouscath(){
@@ -49,43 +55,17 @@ export class StockUpdateComponent {
 
         if (res?.status === 'success') {
          this.data=res
-          
-            
-          Swal.fire({
-            title: 'Success!',
-            text: 'stock update enregistrer',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#ff6c2f'
-          }).then(() => {
-            this.stockData.reset()
-            
-          });
-          
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: res?.message || 'stock update failed',
-            icon: 'error',
-            confirmButtonText: 'Try Again',
-            confirmButtonColor: '#ff6c2f'
-          });
+          this.showSuccessToast("mise a jour de stock reuissit avec success")
          
-        }
+          
+        } 
         
       },
 
       error:(err:any)=> {
         console.log("mon erreur",err);
 
-        Swal.fire({
-          title: 'Error!',
-          text: err.error_description || 'An error occurred',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ff6c2f'
-        });
-        
+        this.showErrorToast("erreur de mise a jour de stock")
       },
       complete:()=> {
         console.log("mon api youpi");
@@ -94,6 +74,37 @@ export class StockUpdateComponent {
       },
     })
      
+  }
+
+
+
+  //  fonction pour les toast
+
+  showSuccessToast(message: string) {
+    const toastBody = document.getElementById('successToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+        this.stockData.reset()
+    } else {
+        console.warn('Success toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('successToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    toast.show();
+  }
+  
+  showErrorToast(message: string) {
+    const toastBody = document.getElementById('errorToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+    } else {
+        console.warn('Error toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('errorToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
   }
 
 

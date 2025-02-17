@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import Swal from 'sweetalert2';
+
 import { AdminService } from '../../services/admin.service';
 
+
+declare const bootstrap: any;
+declare var $: any;
 @Component({
   selector: 'app-add-stock',
   standalone: true,
@@ -50,43 +53,15 @@ export class AddStockComponent implements OnInit {
 
         if (res?.status === 'success') {
          this.data2=res
-          
-            
-          Swal.fire({
-            title: 'Success!',
-            text: 'stock add enregistrer',
-            icon: 'success',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#ff6c2f'
-          }).then(() => {
-            this.stockData.reset()
-            
-          });
-          
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: res?.message || 'stock add failed',
-            icon: 'error',
-            confirmButtonText: 'Try Again',
-            confirmButtonColor: '#ff6c2f'
-          });
-         
+         this.showSuccessToast("creation de stock valider")
+      
         }
-        
+         
       },
 
       error:(err:any)=> {
         console.log("mon erreur",err);
-
-        Swal.fire({
-          title: 'Error!',
-          text: err.error_description || 'An error occurred',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-          confirmButtonColor: '#ff6c2f'
-        });
-        
+       this.showErrorToast("erreur lors de la creation de stock")
       },
       complete:()=> {
         console.log("mon api youpi");
@@ -95,6 +70,37 @@ export class AddStockComponent implements OnInit {
       },
     })
      
+  }
+
+
+
+  //  fonction pour les toast
+
+  showSuccessToast(message: string) {
+    const toastBody = document.getElementById('successToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+        this.stockData.reset()
+    } else {
+        console.warn('Success toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('successToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
+    toast.show();
+  }
+  
+  showErrorToast(message: string) {
+    const toastBody = document.getElementById('errorToastBody');
+    if (toastBody) { 
+        toastBody.textContent = message; 
+    } else {
+        console.warn('Error toast body element not found.');
+    }
+    
+    const toastElement = document.getElementById('errorToast');
+    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+    toast.show();
   }
 
 }
