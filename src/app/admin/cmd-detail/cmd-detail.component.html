@@ -29,6 +29,7 @@
               <div class="order-container" *ngIf="!loading">
                 <div class="order-header">
                   <h1>Commande table {{data.num}} </h1>
+                  <p> {{this.message}} </p>
                 </div>
                 <div class="order-content">
                   <h2>Customer Information</h2>
@@ -70,6 +71,7 @@
                   <div class="actions">
                     <button class="btn btn-primary" *ngIf="statut2" (click)="editstatut()">Confirm Order</button>
                     <button class="btn btn-danger" (click)="nav()">Cancel Order</button>
+                    <button class="btn btn-danger" (click)="annule()">Annull Order</button>
                   </div>
                 </div>
               </div>

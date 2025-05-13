@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'assets/css/dataTables.dataTables.css';
+@import 'assets/css/buttons.dataTables.css';
+@import 'assets/vendors/dropify/dist/dropify.min.css';
+@import 'assets/vendors/dropzone/dropzone.min.css';
+@import 'assets/vendors/select2/select2.min.css';
+@import 'assets/libs/simplebar/dist/simplebar.css';

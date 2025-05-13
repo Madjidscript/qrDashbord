@@ -24,6 +24,10 @@ export class AdminService {
     return this.http.get(this.api_url+`/admin/commandes/${id}`, );
   }
 
+  annulecmd(id:any,num:any) {
+    return this.http.delete(this.api_url+`/admin/annulecommandes/${id}/${num}`, );
+  }
+
   AllCathe() {
     return this.http.get(this.api_url+"/admin/cathegories", );
   }

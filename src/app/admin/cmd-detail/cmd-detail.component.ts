@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SocketService } from '../../services/socket.services.service';
 
 
 declare const bootstrap: any;
@@ -18,19 +19,46 @@ export class CmdDetailComponent implements OnInit {
   plat:any
   alergit:any
   id:any
+  num:any
+  message:any
   statut:any
   statut2:boolean =true
   loading=false
-  constructor(private api:AdminService, private router:Router, private active:ActivatedRoute){}
+  constructor(private api:AdminService, private router:Router, private active:ActivatedRoute,private socket:SocketService){}
 
   ngOnInit() {
     
     this.singulcmd()
+
+    this.socket.onMessage("notification", data => {
+      console.log("mon message depuis le socket backend", data);
+      this.message = data.message;
+    
+      // Durée totale de vocalisation (en millisecondes)
+      const duration = 3000;
+      const intervalTime = 1000; // délai entre chaque répétition
+      const startTime = Date.now();
+    
+      const speakMessage = () => {
+        const now = Date.now();
+        if (now - startTime < duration) {
+          const utterance = new SpeechSynthesisUtterance(this.message);
+          utterance.lang = 'fr-FR';
+          speechSynthesis.speak(utterance);
+    
+          // Planifie la prochaine lecture
+          setTimeout(speakMessage, intervalTime);
+        }
+      };
+    
+      speakMessage(); // Démarrer la lecture
+    });
   }
   singulcmd(){
     this.loading=true
     this.id = this.active.snapshot.paramMap.get("id")
-    console.log("mon id",this.id);
+    this.num = this.active.snapshot.paramMap.get("num")
+    console.log("mon id",this.id,"mon num",this.num);
 
     this.api.DetailCommande(this.id).subscribe({
       next:(res:any)=> {
@@ -72,6 +100,7 @@ export class CmdDetailComponent implements OnInit {
 
         if (res?.status === 'success') {
          this.showSuccessToast("commande valier")
+         
           
         } 
          
@@ -90,6 +119,43 @@ export class CmdDetailComponent implements OnInit {
     })
 
   }
+
+   
+
+  annule(){
+    
+
+    this.api.annulecmd(this.id,this.num).subscribe({
+      next:(res:any)=> {
+        console.log("mons data",res);
+        this.statut = res
+
+        if (res?.status === 'success') {
+         this.showSuccessToast("commande annuler")
+        //  setTimeout(() => {
+        //   this.nav()
+        //  }, 3000);
+
+        
+          
+        } 
+         
+  
+      },
+      error:(err:any)=> {
+        console.log("mon erreur",err);
+       this.showErrorToast("erreur de annulation")
+        
+        
+      },
+      complete:()=> {
+        console.log("mon api youpi");
+        
+      },
+    })
+
+  }
+  
 
   nav(){
     this.router.navigate(["/admin/commande"])

@@ -34,14 +34,9 @@
             ],
             "styles": [
               
-              "src/styles.css",
+              "src/styles.css"
             
-              "src/assets/css/dataTables.dataTables.css",
-              "src/assets/css/buttons.dataTables.css",
-              "src/assets/vendors/dropify/dist/dropify.min.css",
-              "src/assets/vendors/dropzone/dropzone.min.css",
-              "src/assets/vendors/select2/select2.min.css",
-              "src/assets/libs/simplebar/dist/simplebar.css"
+             
 
             ],
             "scripts": [

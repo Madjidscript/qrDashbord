@@ -28,7 +28,7 @@ const routes: Routes = [
       {path:"stocknbre",component:StockNbreComponent},
       // {path:"addsouscathegorie",component:AddSouscathegorieComponent},
       {path:"commande",component:CommandeComponent},
-      {path:"cmd-detail/:id",component:CmdDetailComponent},
+      {path:"cmd-detail/:id/:num",component:CmdDetailComponent},
       {path:"cmd-valider",component:CmdValiderComponent},
       {path:"restauxqr",component:QrRestauxComponent},
       {path:"add-qr",component:AddQrComponent},
