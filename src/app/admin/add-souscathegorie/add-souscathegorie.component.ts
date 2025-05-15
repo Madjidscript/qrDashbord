@@ -97,6 +97,8 @@ export class AddSouscathegorieComponent implements OnInit {
     formData.append("prix", this.sousCathegorieData.get("prix")?.value);
     formData.append("id_cath", this.sousCathegorieData.get("id_cath")?.value);
     formData.append("image", this.file as File);
+    console.log("my file",this.file);
+
 
     console.log("Form validation status:", this.sousCathegorieData.valid);
 

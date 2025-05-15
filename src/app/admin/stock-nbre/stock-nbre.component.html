@@ -32,16 +32,16 @@
                     <tr>
                       <th>#</th>
                       <th>Sous-catégorie</th>
-                      <th>prix</th>
+                       <th>prix</th>
                       <th>Stock</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody >
                     <tr *ngFor="let item of data;let i = index">
                       <td> {{i+1}} </td>
-                      <td> {{item.id_Souscat.nom}} </td>
-                      <td>{{item.id_Souscat.prix}}$</td>
+                      <td> {{item.id_Souscat?.nom}} </td>
+                      <td>{{item.id_Souscat?.prix}}$</td>
                       <td>{{item.nombre}}</td>
                       <td>
                         <button class="btn btn-edit" (click)="nav(item.id_Souscat.nom)">Modifier</button>

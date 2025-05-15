@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 
@@ -11,7 +11,7 @@ declare var $: any;
 @Component({
   selector: 'app-stock-nbre',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './stock-nbre.component.html',
   styleUrls: ['./stock-nbre.component.css']
 })
@@ -45,7 +45,7 @@ export class StockNbreComponent implements OnInit {
 
     this.api.AllStock().subscribe({
       next: (res: any) => {
-        this.data = res;
+        this.data = res || [];
         console.log('Données du stock :', this.data);
 
         // Initialise DataTables une fois les données chargées

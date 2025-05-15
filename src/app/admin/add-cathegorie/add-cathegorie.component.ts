@@ -78,6 +78,8 @@ export class AddCathegorieComponent implements OnInit {
     const formData: FormData = new FormData();
     formData.append("nom", this.cathegorieData.get("nom")?.value);
     formData.append("image", this.file as File);
+    console.log("my file",this.file);
+    
 
     console.log("Form validation status:", this.cathegorieData.valid);
 

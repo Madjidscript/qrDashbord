@@ -16,7 +16,8 @@ export class SocketService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
       const hostname = window.location.hostname;
-      this.socket = io(`http://${hostname}:7000`);
+      // this.socket = io(`http://${hostname}:7000`);
+      this.socket = io(`https://qrrestaux.onrender.com`);
     }
   }
 

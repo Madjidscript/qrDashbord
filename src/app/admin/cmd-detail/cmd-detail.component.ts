@@ -30,29 +30,7 @@ export class CmdDetailComponent implements OnInit {
     
     this.singulcmd()
 
-    this.socket.onMessage("notification", data => {
-      console.log("mon message depuis le socket backend", data);
-      this.message = data.message;
-    
-      // Durée totale de vocalisation (en millisecondes)
-      const duration = 3000;
-      const intervalTime = 1000; // délai entre chaque répétition
-      const startTime = Date.now();
-    
-      const speakMessage = () => {
-        const now = Date.now();
-        if (now - startTime < duration) {
-          const utterance = new SpeechSynthesisUtterance(this.message);
-          utterance.lang = 'fr-FR';
-          speechSynthesis.speak(utterance);
-    
-          // Planifie la prochaine lecture
-          setTimeout(speakMessage, intervalTime);
-        }
-      };
-    
-      speakMessage(); // Démarrer la lecture
-    });
+  
   }
   singulcmd(){
     this.loading=true
