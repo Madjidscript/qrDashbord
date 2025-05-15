@@ -3,7 +3,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/dashbord", 
+      "src": "dist/dashbord/**",
       "use": "@vercel/static"
     }
   ],
