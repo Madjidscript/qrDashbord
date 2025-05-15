@@ -1,12 +1,12 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { AdminService } from '../../services/admin.service';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-dashbord',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashbord.component.html',
   styleUrls: ['./dashbord.component.css'], // Correction: 'styleUrls' instead of 'styleUrl'
 })
@@ -18,6 +18,7 @@ export class DashbordComponent implements OnInit, AfterViewInit {
 
   labels: any;
   data: any;
+  loading= false;
   falseCount: any;
   trueCount: any;
   topPlats: any;
@@ -48,6 +49,7 @@ export class DashbordComponent implements OnInit, AfterViewInit {
   }
 
   getallcoubre() {
+    this.loading =true
     this.api.coubre().subscribe({
       next: (res: any) => {
         console.log('mon data coubre', res);
@@ -59,9 +61,13 @@ export class DashbordComponent implements OnInit, AfterViewInit {
       },
       error: (err: any) => {
         console.log('mon err', err);
+      this.loading =false
+
       },
       complete: () => {
         console.log('mon api youpi');
+      this.loading =false
+
       },
     });
   }
