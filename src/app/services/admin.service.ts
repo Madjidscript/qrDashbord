@@ -11,7 +11,11 @@ import { environment } from '../../environnement/environnement.prod';
 export class AdminService {
 
   constructor(private http:HttpClient) { }
-  api_url= environment.apiUrl
+  api_url= environment.apiUrl 
+
+  Connexion(body:any) {
+    return this.http.post(this.api_url+"/admin/connexions",body );
+  }
 
   AllCommande() {
     return this.http.get(this.api_url+"/admin/commandes", );

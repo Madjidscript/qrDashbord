@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { SessionService } from '../../../sessiervices/session.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -12,7 +14,7 @@ declare var $: any;
 })
 export class HearderComponent implements OnInit {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: any,private storage:SessionService,private router:Router) {}
 
   toggleSidebar(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -50,5 +52,11 @@ export class HearderComponent implements OnInit {
 
   ngOnInit(): void {
     this.toggleSidebar();
+  }
+
+
+  deconnexion(){
+    this.storage.removeItem("qrdashbord")
+    this.router.navigate(['/auth/connexion'])
   }
 }
