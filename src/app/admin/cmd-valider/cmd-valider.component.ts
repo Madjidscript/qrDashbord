@@ -92,7 +92,7 @@ export class CmdValiderComponent implements OnInit, AfterViewInit {
     });
   }
 
-  nav(id: any) {
-    this.router.navigate([`/admin/cmd-detail/${id}`]);
+  nav(id:any,num:any) {
+    this.router.navigate([`/admin/cmd-detail/${id}/${num}`]);
   }
 }
