@@ -114,8 +114,6 @@ export class CmdDetailComponent implements OnInit {
         //   this.nav()
         //  }, 3000);
 
-        
-          
         } 
          
   
