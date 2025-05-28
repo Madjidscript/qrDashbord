@@ -67,7 +67,7 @@ export class CmdValiderComponent implements OnInit, AfterViewInit {
     this.api.AllCommande().subscribe({
       next: (res: any) => {
         this.data = res;
-        this.data2 = this.data.filter((item: any) => item.statut == false);
+        this.data2 = this.data.filter((item: any) => item.statut == 'Servie');
         console.log('Commandes récupérées:', res);
 
         if (this.isBrowser && typeof $ !== 'undefined') {

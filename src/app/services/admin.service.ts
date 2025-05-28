@@ -24,8 +24,8 @@ export class AdminService {
   DetailCommande(id:any) {
     return this.http.get(this.api_url+`/admin/detailcmd/${id}`, );
   }
-  Editstatut(id:any) {
-    return this.http.get(this.api_url+`/admin/commandes/${id}`, );
+  Editstatut(id:any,statut:any) {
+    return this.http.get(this.api_url+`/admin/commandes/${id}/${statut}`, );
   }
 
   annulecmd(id:any,num:any) {

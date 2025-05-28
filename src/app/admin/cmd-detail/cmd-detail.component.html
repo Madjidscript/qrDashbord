@@ -37,6 +37,7 @@
                     <div *ngFor="let item of alergit">
                       <p><strong>Allergie:</strong> {{ item.alergit || "Pas d'allergie" }}</p>
                       <p><strong>Température:</strong> {{ item.temperature || "Pas de température demandée" }}</p>
+                      <p><strong>Statut:</strong> {{ statut2}}</p>
                     </div>
                   </div>
                   <ng-template #noData>
@@ -66,10 +67,11 @@
                     </tbody>
                   </table>
             
-                  <p class="total">Grand Total: <span> {{data.total}} </span> €</p>
+                  <p class="total">Grand Total: <span> {{data.total}} </span> Fcfa</p>
             
                   <div class="actions">
-                    <button class="btn btn-primary" *ngIf="statut2" (click)="editstatut()">Confirm Order</button>
+                    <button class="btn btn-primary" *ngIf="statut2 =='en_attente' "  (click)="editstatut('en_preparation')">preparation</button>
+                    <button class="btn btn-primary" *ngIf="statut2 =='en_preparation' || 'en_attente' "   (click)="editstatut('Servie')">Servie</button>
                     <button class="btn btn-danger" (click)="nav()">Cancel Order</button>
                     <button class="btn btn-danger" (click)="annule()">Annull Order</button>
                   </div>

@@ -22,7 +22,7 @@ export class CmdDetailComponent implements OnInit {
   num:any
   message:any
   statut:any
-  statut2:boolean =true
+  statut2:any
   loading=false
   constructor(private api:AdminService, private router:Router, private active:ActivatedRoute,private socket:SocketService){}
 
@@ -68,16 +68,18 @@ export class CmdDetailComponent implements OnInit {
 
 
 
-  editstatut(){
+  editstatut(statut:any){
     
 
-    this.api.Editstatut(this.id).subscribe({
+    this.api.Editstatut(this.id,statut).subscribe({
       next:(res:any)=> {
-        console.log("mons data",res);
-        this.statut = res
+       
 
         if (res?.status === 'success') {
          this.showSuccessToast("commande valier")
+         console.log("mons data",res);
+         this.statut = res
+         this.singulcmd()
          
           
         } 
