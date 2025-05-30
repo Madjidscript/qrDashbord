@@ -19,29 +19,41 @@ export class AdminComponent  implements OnInit{
   message: any;
   constructor(private socket:SocketService){}
   ngOnInit(): void {
-    this.socket.onMessage("notification", data => {
-      console.log("mon message depuis le socket backend", data);
-      this.message = data.message;
+    ["notification", "notifications"].forEach(event =>
+      this.socket.onMessage(event, data => {
+        console.log("Message reçu via socket :", data);
+        this.message = data.message;
     
-      // Durée totale de vocalisation (en millisecondes)
-      const duration = 3000;
-      const intervalTime = 1000; // délai entre chaque répétition
-      const startTime = Date.now();
-    
-      const speakMessage = () => {
-        const now = Date.now();
-        if (now - startTime < duration) {
+        // Vérifie si la synthèse vocale est disponible
+        if ('speechSynthesis' in window) {
           const utterance = new SpeechSynthesisUtterance(this.message);
           utterance.lang = 'fr-FR';
-          speechSynthesis.speak(utterance);
     
-          // Planifie la prochaine lecture
-          setTimeout(speakMessage, intervalTime);
+          // Annule toute lecture en cours
+          speechSynthesis.cancel();
+    
+          // Répéter la lecture toutes les secondes pendant 3 secondes
+          const duration = 3000;
+          const intervalTime = 1000;
+          const startTime = Date.now();
+    
+          const speakMessage = () => {
+            const now = Date.now();
+            if (now - startTime < duration) {
+              const u = new SpeechSynthesisUtterance(this.message);
+              u.lang = 'fr-FR';
+              speechSynthesis.speak(u);
+    
+              setTimeout(speakMessage, intervalTime);
+            }
+          };
+    
+          speakMessage(); // Commence à parler
+        } else {
+          console.warn("Synthèse vocale non supportée sur ce navigateur.");
         }
-      };
-    
-      speakMessage(); // Démarrer la lecture
-    });
+      })
+    );
   }
   
 
