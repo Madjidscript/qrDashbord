@@ -68,7 +68,7 @@ export class CommandeComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         this.data = res;
         // this.data2 = this.data;
-        this.data2 = this.data.filter((item: any) => item.statut === "en_attente" || "en_preparation");
+        this.data2 = this.data.filter((item: any) => item.statut !="Servie" );
         console.log('Commandes récupérées :', res);
 
         // Réinitialiser DataTables après réception des données
