@@ -33,6 +33,7 @@ export class AdminComponent  implements OnInit{
           speechSynthesis.cancel();
     
           // Répéter la lecture toutes les secondes pendant 3 secondes
+          
           const duration = 3000;
           const intervalTime = 1000;
           const startTime = Date.now();
