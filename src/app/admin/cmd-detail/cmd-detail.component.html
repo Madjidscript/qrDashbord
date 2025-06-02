@@ -73,7 +73,7 @@
                     <button class="btn btn-primary" *ngIf="statut2 =='en_attente' "  (click)="editstatut('en_preparation')">preparation</button>
                     <button class="btn btn-primary" *ngIf="statut2 =='en_preparation' || 'en_attente' "   (click)="editstatut('Servie')">Servie</button>
                     <button class="btn btn-danger" (click)="nav()">Cancel Order</button>
-                    <button class="btn btn-danger" (click)="annule()">Annull Order</button>
+                    <button class="btn btn-danger" *ngIf="statut2 =='Servie'" (click)="editstatut('deleted_by_admin')">Annull Order</button>
                   </div>
                 </div>
               </div>
