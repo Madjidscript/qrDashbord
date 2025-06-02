@@ -103,7 +103,7 @@
   <!-- Bouton Annuler la commande (admin) -->
   <button 
     class="btn btn-danger" 
-    *ngIf="statut2 !== 'Servie'" 
+  *ngIf="statut2 !== 'Servie' && statut2 !== 'deleted_by_user' && statut2 !== 'deleted_by_admin'" 
     (click)="editstatut('deleted_by_admin')">
     Annul Order
   </button>
