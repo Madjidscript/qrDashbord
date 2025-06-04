@@ -176,6 +176,25 @@
               <span class="hide-menu">General</span>
             </a>
           </li>
+
+
+          <!-- switch -->
+           <li style="margin-left: 5px;">
+
+            <div class="form-check form-switch">
+  <input
+    class="form-check-input"
+    type="checkbox"
+    id="flexSwitchCheckDefault"
+    [checked]="isChecked"
+    (change)="update($event)"
+  />
+  <label class="form-check-label" for="flexSwitchCheckDefault">
+    {{this.isChecked}}
+  </label>
+</div>
+
+           </li>
         </ul>
   
       </nav>

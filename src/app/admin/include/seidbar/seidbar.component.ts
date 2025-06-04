@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common'; // Importer isPlatformBrowser
 import { RouterLink } from '@angular/router';
+import { AdminService } from '../../../services/admin.service';
 
 declare var $: any;
 
@@ -12,11 +13,13 @@ declare var $: any;
   styleUrls: ['./seidbar.component.css']
 })
 export class SeidbarComponent implements OnInit {
+  isChecked = true; // ✅ activé par défaut
   
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: any,private api:AdminService) {}
 
   ngOnInit() {
     this.Activate();
+    this.getstatut()
   }
 
   Activate() {
@@ -68,5 +71,44 @@ export class SeidbarComponent implements OnInit {
         e.preventDefault();
       });
     }
+  }
+
+  getstatut(){
+    this.api.gettatut().subscribe({
+      next:(res:any)=> {
+        console.log("mon satut response",res);
+        this.isChecked = res.isOpen
+        
+      },
+      error:(err:any)=> {
+        console.log("mon err",err);
+      },
+      complete() {
+        console.log("ok");
+        
+      },
+    })
+
+  }
+
+  update(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.isChecked = input.checked;
+    console.log('Nouvelle valeur :', this.isChecked);
+    this.api.updatestatut({ isOpen:this.isChecked}).subscribe({
+      next:(res:any)=> {
+        console.log("mon satut response",res);
+        
+      },
+      error:(err:any)=> {
+        console.log("mon err",err);
+      },
+      complete() {
+        console.log("ok");
+        
+      },
+    })
+
+    // Tu peux ici appeler ton API ou autre logique
   }
 }

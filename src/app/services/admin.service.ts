@@ -71,4 +71,12 @@ export class AdminService {
     return this.http.post(this.api_url+"/admin/qrcode",body);
   }
 
+  updatestatut(body:any) {
+    return this.http.post(this.api_url+"/admin/updatestatut",body);
+  }
+
+  gettatut() {
+    return this.http.get(this.api_url+"/admin/getstatut");
+  }
+
 }
