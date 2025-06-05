@@ -14,12 +14,19 @@ declare var $: any;
 })
 export class SeidbarComponent implements OnInit {
   isChecked = true; // ✅ activé par défaut
+  text:any
   
   constructor(@Inject(PLATFORM_ID) private platformId: any,private api:AdminService) {}
 
   ngOnInit() {
     this.Activate();
     this.getstatut()
+
+    if (this.isChecked == true) {
+      this.text = "active"
+    }else{
+      this.text ="inactive"
+    }
   }
 
   Activate() {
