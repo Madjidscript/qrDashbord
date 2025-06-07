@@ -80,7 +80,7 @@
   <!-- Bouton Préparation -->
   <button 
     class="btn btn-primary" 
-    *ngIf="statut2 !== 'deleted_by_admin' && statut2 !== 'deleted_by_user'"  
+  *ngIf="statut2 !== 'en_preparation'  && statut2 !== 'deleted_by_user' && statut2 !== 'deleted_by_admin' && statut2 !== 'Servie'" 
     (click)="editstatut('en_preparation')">
     Préparation
   </button>
@@ -88,7 +88,7 @@
   <!-- Bouton Servie -->
   <button 
     class="btn btn-primary" 
-   *ngIf="statut2 === 'en_preparation' || statut2 === 'en_attente' || (statut2 !== 'deleted_by_admin' && statut2 !== 'deleted_by_user')"
+  *ngIf="statut2 !== 'Servie' && statut2 !== 'deleted_by_user' && statut2 !== 'deleted_by_admin'" 
     (click)="editstatut('Servie')">
     Servie
   </button>
