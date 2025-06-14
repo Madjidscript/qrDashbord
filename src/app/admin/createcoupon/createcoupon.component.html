@@ -1,0 +1,69 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h2 class="mb-3 mb-md-0 text-primary">Créer un Coupon</h2>
+    </div>
+  </div>
+  <hr>
+
+  <div class="section" style="margin-top: 5;">
+    <div class="container">
+      <div class="row">
+        <div class="booking-form">
+          <div class="form-header">
+            <h6 class="title-centered">Créer un bon de réduction</h6>
+          </div>
+
+          <form [formGroup]="couponForm" (ngSubmit)="createCoupon($event)">
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <div class="form-group">
+                  <label for="code">Code</label>
+                  <input type="text" class="form-control" formControlName="code" placeholder="Ex: BIENVENUE10">
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="reduction">Réduction</label>
+                  <input type="number" class="form-control" formControlName="reduction" placeholder="Ex: 10">
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="isPercentage">Type de réduction</label>
+                  <select class="form-control" formControlName="isPercentage">
+                    <option [value]="true">Pourcentage (%)</option>
+                    <option [value]="false">Montant fixe</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="expirationDate">Date d’expiration</label>
+                  <input type="date" class="form-control" formControlName="expirationDate">
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="maxUsage">Utilisation max</label>
+                  <input type="number" class="form-control" formControlName="maxUsage" placeholder="Ex: 100">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-btn">
+              <button type="button" class="btn btn-danger">Annuler</button>
+              <button type="submit" class="btn btn-light-primary submit-btn">Créer Coupon</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast identique à celui que tu avais -->

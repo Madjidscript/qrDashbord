@@ -1,0 +1,33 @@
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.text-muted {
+  opacity: 0.5;
+}
+
+
+.container-fluid {
+    position: relative;
+    top: 85px;
+}
+
+h3.text-primary {
+  font-size: 24px;
+  font-weight: 600;
+
+}
+
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond avec opacité */
+    z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+  }

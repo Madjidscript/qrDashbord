@@ -1,0 +1,76 @@
+<!-- Modal de confirmation -->
+<div class="spinner-container" *ngIf="loading" >
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+      <div>
+        <h2 class="mb-3 mb-md-0 text-primary " style="text-align: center;">liste Coupon</h2>
+      </div>
+  
+    </div>
+    <hr>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Code</th>
+          <th>Réduction</th>
+          <th>Type</th>
+          <th>Expiration</th>
+          <th>Utilisé</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="!loading">
+        <tr *ngFor="let coupon of coupons">
+          <td [ngClass]="{ 'text-muted': !coupon.isActive }">
+            {{ coupon.code }}
+          </td>
+          <td>
+            {{ coupon.reduction }}{{ coupon.isPercentage ? '%' : ' FCFA' }}
+          </td>
+          <td>{{ coupon.isPercentage ? 'Pourcentage' : 'Fixe' }}</td>
+          <td>{{ coupon.expirationDate | date: 'shortDate' }}</td>
+          <td>{{ coupon.usedCount || 0 }} / {{ coupon.maxUsage }}</td>
+          <td>
+            <span class="badge" [ngClass]="coupon.isActive ? 'bg-success' : 'bg-secondary'">
+              {{ coupon.isActive ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="askDeleteCoupon(coupon._id)">
+              Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal de confirmation -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body">
+        Voulez-vous vraiment supprimer ce coupon ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

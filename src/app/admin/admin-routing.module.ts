@@ -14,6 +14,8 @@ import { DashbordComponent } from './dashbord/dashbord.component';
 import { CmdDetailComponent } from './cmd-detail/cmd-detail.component';
 import { CmdValiderComponent } from './cmd-valider/cmd-valider.component';
 import { AddQrComponent } from './add-qr/add-qr.component';
+import { CreatecouponComponent } from './createcoupon/createcoupon.component';
+import { GetcouponComponent } from './getcoupon/getcoupon.component';
 
 const routes: Routes = [
   {path:"",component:AdminComponent,
@@ -32,6 +34,8 @@ const routes: Routes = [
       {path:"cmd-valider",component:CmdValiderComponent},
       {path:"restauxqr",component:QrRestauxComponent},
       {path:"add-qr",component:AddQrComponent},
+      {path:"create-coupon",component:CreatecouponComponent},
+      {path:"getall-coupon",component:GetcouponComponent},
     ]
   }
 ];
