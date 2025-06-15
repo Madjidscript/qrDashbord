@@ -36,8 +36,11 @@
                   <div *ngIf="alergit?.length > 0; else noData">
                     <div *ngFor="let item of alergit">
                       <p><strong>Allergie:</strong> {{ item.alergit || "Pas d'allergie" }}</p>
-                      <p><strong>code promo:</strong> {{ item.promo || "Pas de code promo" }}</p>
+                      <p><strong>code promo:</strong> {{ data.promo || "Pas de code promo" }}</p>
+                      <p *ngIf="data.promo"><strong>code promo:</strong> {{ data.reduct || "Pas de reduct" }}</p>
                       <p><strong>Température:</strong> {{ item.temperature || "Pas de température demandée" }}</p>
+                      <p ><strong>code promo:</strong> {{ data.heure  }}</p>
+
                       <p><strong>Statut:</strong> {{ statut2}}</p>
                     </div>
                   </div>
