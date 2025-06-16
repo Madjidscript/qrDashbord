@@ -29,7 +29,7 @@
       </thead>
       <tbody *ngIf="!loading">
         <tr *ngFor="let coupon of coupons">
-          <td [ngClass]="{ 'text-muted': !coupon.isActive || isExpired(coupon.expirationDate)  }">
+          <td [ngClass]="{ 'text-muted': !coupon.isActive   }">
             {{ coupon.code }}
           </td>
           <td>
