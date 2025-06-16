@@ -72,4 +72,10 @@ export class GetcouponComponent {
       }
     });
   }
+
+  isExpired(dateStr: string): boolean {
+  const now = new Date();
+  const expireDate = new Date(dateStr);
+  return expireDate < now;
+}
 }

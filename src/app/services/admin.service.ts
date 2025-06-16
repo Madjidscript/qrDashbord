@@ -87,9 +87,7 @@ export class AdminService {
     return this.http.get(this.api_url+"/admin/getcoupon");
   }
 
-  verifcoupon(code:any) {
-    return this.http.get(this.api_url+`/admin/verifcoupon/${code}`);
-  }
+ 
 
   deletecoupon(id:any) {
     return this.http.delete(this.api_url+`/admin/deletecoupon/${id}`);
