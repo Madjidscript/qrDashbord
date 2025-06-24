@@ -40,7 +40,7 @@ export class AddQrComponent implements OnInit {
 
       error:(err:any)=> {
         console.log("mon erreur",err);
-       this.showSuccessToast("creation des qr echouer")
+       this.showErrorToast("creation des qr echouer")
         
         
       },
