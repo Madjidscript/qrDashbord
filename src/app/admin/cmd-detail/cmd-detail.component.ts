@@ -16,6 +16,7 @@ declare var $: any;
 })
 export class CmdDetailComponent implements OnInit {
   data:any
+  distances:any
   plat:any
   alergit:any
   id:any
@@ -24,6 +25,7 @@ export class CmdDetailComponent implements OnInit {
   statut:any
   statut2:any
   loading=false
+  loc: any;
   constructor(private api:AdminService, private router:Router, private active:ActivatedRoute,private socket:SocketService){}
 
   ngOnInit() {
@@ -45,6 +47,8 @@ export class CmdDetailComponent implements OnInit {
         this.plat = res.commandes.data
         this.alergit = res.commandes.alergit
         this.statut2 = res.commandes.statut
+
+        this.verifierProximiteRestaurant()
         
         
       },
@@ -170,6 +174,53 @@ export class CmdDetailComponent implements OnInit {
     const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
     toast.show();
   }
+
+
+  calculerDistanceEnMetres(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371000; // Rayon de la Terre en mètres
+  const toRad = (x: number) => x * Math.PI / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+
+
+  verifierProximiteRestaurant(): void {
+  const userLat = this.data.latitude;
+  const userLng = this.data.longitude
+;
+
+  // Coordonnées fixes du restaurant
+  const restauLat = 5.3536;
+  const restauLng = -4.0012;
+
+  const distance = this.calculerDistanceEnMetres(userLat, userLng, restauLat, restauLng);
+  console.log('Distance entre l\'utilisateur et le restaurant :', distance, 'm');
+  this.loc = '✅ Vous êtes dans le périmètre du restaurant.'
+  this.distances = distance + 'm'
+
+
+  if (distance <= 150) {
+    this.loc = '✅ Vous êtes dans le périmètre du restaurant.'
+    console.log('✅ Vous êtes dans le périmètre du restaurant.');
+    // bonne réponse ici (ex: return true, ou set un état, etc.)
+  } else {
+    console.log('❌ Vous êtes trop loin du restaurant.');
+    this.loc = '✅ Vous êtes trop loin du restaurant.'
+
+    // mauvaise réponse ici (ex: return false, ou afficher un message)
+  }
+}
+
 
 
 }
