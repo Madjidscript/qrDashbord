@@ -200,8 +200,8 @@ export class CmdDetailComponent implements OnInit {
 ;
 
   // Coordonnées fixes du restaurant
-  const restauLat = 5.3536;
-  const restauLng = -4.0012;
+  const restauLat = 5.3515681944581;
+  const restauLng = -4.02062942582813;
 
   const distance = this.calculerDistanceEnMetres(userLat, userLng, restauLat, restauLng);
   console.log('Distance entre l\'utilisateur et le restaurant :', distance, 'm');
