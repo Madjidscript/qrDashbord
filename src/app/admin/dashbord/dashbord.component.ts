@@ -31,6 +31,11 @@ export class DashbordComponent implements OnInit, AfterViewInit {
 
   // Ajout de vérification de la plateforme
   isBrowser: boolean;
+  servie: any;
+  enPreparation: any;
+  supprimeParClient: any;
+  supprimeParAdmin: any;
+  enAttente: any;
 
   constructor(private api: AdminService, @Inject(PLATFORM_ID) private platformId: any) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -48,35 +53,86 @@ export class DashbordComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // getallcoubre() {
+  //   this.loading =true
+  //   this.api.coubre().subscribe({
+  //     next: (res: any) => {
+  //       console.log('mon data coubre', res);
+  //       this.trueCount = res.trueCount;
+  //       this.falseCount = res.falseCount;
+  //       this.topPlats = res.topPlats;
+  //       this.stockinf = res.stockinf;
+  //       this.creerGraphiques();
+  //     },
+  //     error: (err: any) => {
+  //       console.log('mon err', err);
+  //     this.loading =false
+
+  //     },
+  //     complete: () => {
+  //       console.log('mon api youpi');
+  //     this.loading =false
+
+  //     },
+  //   });
+  // }
+
   getallcoubre() {
-    this.loading =true
-    this.api.coubre().subscribe({
-      next: (res: any) => {
-        console.log('mon data coubre', res);
-        this.trueCount = res.trueCount;
-        this.falseCount = res.falseCount;
-        this.topPlats = res.topPlats;
-        this.stockinf = res.stockinf;
-        this.creerGraphiques();
-      },
-      error: (err: any) => {
-        console.log('mon err', err);
-      this.loading =false
+  this.loading = true;
+  
+  this.api.coubre().subscribe({
+    next: (res: any) => {
+      console.log('mon data coubre', res);
 
-      },
-      complete: () => {
-        console.log('mon api youpi');
-      this.loading =false
+      // 📊 Données venant du backend
+      this.servie = res.Servie;
+      this.enPreparation = res.preparation;
+      this.supprimeParClient = res.deleted_by_user;
+      this.supprimeParAdmin = res.deleted_by_admin;
+      this.enAttente = res.en_attente;
 
-      },
-    });
-  }
+      // 🔝 Top plats & stock bas
+      this.topPlats = res.topPlats;
+      this.stockinf = res.stockinf;
+
+      // 🎨 Créer les graphiques après avoir reçu les données
+      this.creerGraphiques();
+    },
+    error: (err: any) => {
+      console.error('Erreur API coubre:', err);
+      this.loading = false;
+    },
+    complete: () => {
+      console.log('API coubre chargée');
+      this.loading = false;
+    }
+  });
+}
+
 
   creerGraphiques() {
+    // const commandesParStatutData = {
+    //   labels: ['En cours', 'Validées'],
+    //   data: [this.trueCount, this.falseCount],
+    // };
+
     const commandesParStatutData = {
-      labels: ['En cours', 'Validées'],
-      data: [this.trueCount, this.falseCount],
-    };
+  labels: [
+    'Servies',
+    'En préparation',
+    'Supprimées par client',
+    'Supprimées par admin',
+    'En attente'
+  ],
+  data: [
+    this.servie,
+    this.enPreparation,
+    this.supprimeParClient,
+    this.supprimeParAdmin,
+    this.enAttente
+  ]
+};
+
 
     const plat = this.stockinf.map((item: any) => item.plat);
     const datas = this.stockinf.map((item: any) => item.stock);
