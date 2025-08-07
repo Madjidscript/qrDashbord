@@ -104,6 +104,9 @@ export class CmdDetailComponent implements OnInit {
 
   }
 
+
+  
+
    
 
   annule(){
