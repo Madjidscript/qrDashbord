@@ -21,11 +21,6 @@ export class SocketService {
     }
   }
 
-  // constructor() {
-  //   const hostname = window.location.hostname;
-  //   this.socket = io(`http://${hostname}:7000`);
-
-  // }
 
   sendMessage(title:any,msg: any) {
     this.socket.emit(title, msg);
