@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
+import { environment } from '../../environnement/environnement.prod';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -7,17 +9,41 @@ import { SwPush } from '@angular/service-worker';
 })
 export class PushserviceService {
 
-readonly VAPID_PUBLIC_KEY = "BLPWq1RQgiZjHm2e-hOSHCEcwQngRYENjX37WhVoYpzJ31eSEz-dH4L47nxIR70rN8_V7_otDivvRiDXO4KMoXE"
-;
+  constructor(private swPush: SwPush, private http: HttpClient) {}
+    api_url= environment.apiUrl 
+  
 
-  constructor(private swPush: SwPush) {}
+  // Récupérer la clé publique depuis Express
+  getPublicKey() {
+    return this.http.get<{ publicKey: string }>(`${this.api_url}/admin/public-key`);
+  }
 
-  subscribeToPush() {
-    if (!this.swPush.isEnabled) {
-      console.warn('Push non supporté');
-      return;
-    }
-    return this.swPush.requestSubscription({
-      serverPublicKey: this.VAPID_PUBLIC_KEY,
+  // S'abonner aux notifications push
+  subscribeToPush(emon_id: string) {
+    this.getPublicKey().subscribe({
+      next: (data) => {
+        this.swPush.requestSubscription({
+          serverPublicKey: data.publicKey
+        }).then(sub => {
+          // Envoi de l'abonnement au backend
+          this.http.post(`${this.api_url}/admin/subscribe`, {
+            emon_id,
+            subscription: sub
+          }).subscribe(() => {
+            console.log('✅ Abonnement push enregistré');
+          });
+        }).catch(err => console.error('❌ Erreur abonnement push', err));
+      }
     });
-  }}
+  }
+
+  // Écouter les notifications entrantes
+  listenToMessages() {
+    this.swPush.messages.subscribe((message:any) => {
+      console.log('📩 Notification reçue', message);
+      alert(message['message'] || 'Nouvelle notification reçue');
+    });
+  }
+
+
+  }
