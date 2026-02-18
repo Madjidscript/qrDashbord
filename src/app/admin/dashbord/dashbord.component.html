@@ -6,22 +6,23 @@
 
 <!-- *ngIf="!loading" -->
 
-<div class="container" >
-  <div class="chart-container">
+<div class="container fade-in" >
+  <div class="chart-container hover-lift" style="animation-delay: 0.1s;">
       <h2>Commandes par Statut</h2>
       <canvas #commandesParStatutCanvas></canvas>
   </div>
 
-  <div class="chart-container">
+  <div class="chart-container hover-lift" style="animation-delay: 0.2s;">
       <h2>Top 5 des Stock inférieur</h2>
       <canvas #stockParCategorieCanvas></canvas>
   </div>
-  <div class="chart-container">
+
+  <div class="chart-container hover-lift" style="animation-delay: 0.3s;">
       <h2>Top 5 des Produits les Plus Commandés</h2>
       <canvas #topProduitsCanvas></canvas>
   </div>
 
-  <div class="chart-container">
+  <div class="chart-container hover-lift" style="animation-delay: 0.4s;">
       <h2>Évolution des Commandes (7 derniers jours)</h2>
       <canvas #evolutionCommandesCanvas></canvas>
   </div>

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -18,14 +18,22 @@ declare var $: any;
 })
 export class StockUpdateComponent {
   data:any
-  name:any
+  stockId:any
   stockData:FormGroup= new FormGroup({
+    _id: new FormControl(""),
     nombre: new FormControl("",Validators.required),
     id_Souscat: new FormControl("",Validators.required)
   })
-  constructor(private api:AdminService, private activate:ActivatedRoute){}
+  constructor(private api:AdminService, private activate:ActivatedRoute,private router:Router){}
   ngOnInit() {
-    this.name = this.activate.snapshot.paramMap.get("name")
+    this.stockId = this.activate.snapshot.paramMap.get("id")
+    const nombre = this.activate.snapshot.paramMap.get("nombre")
+    const souscat = this.activate.snapshot.paramMap.get("souscat")
+    this.stockData.patchValue({
+      _id: this.stockId,
+      nombre: nombre,
+      id_Souscat: souscat
+    })
     this.getallsouscath()
   }
   getallsouscath(){
@@ -47,18 +55,22 @@ export class StockUpdateComponent {
 
   validation(event:Event){
      event.preventDefault()
-     console.log("mon data",this.stockData.value);
+     const body = {
+       _id: this.stockId,
+       nombre: this.stockData.value.nombre,
+       id_Souscat: this.stockData.value.id_Souscat
+     }
+     console.log("mon data",body);
 
-     this.api.UpdateStock(this.stockData.value).subscribe({
+     this.api.UpdateStock(body).subscribe({
       next:(res:any)=> {
         console.log("ma reponse",res);
 
         if (res?.status === 'success') {
          this.data=res
           this.showSuccessToast("mise a jour de stock reuissit avec success")
-         
-          
         } 
+        this.router.navigate(['/admin/stocknbre'])
         
       },
 

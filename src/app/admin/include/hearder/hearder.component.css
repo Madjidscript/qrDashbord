@@ -1,0 +1,319 @@
+/* ===== Header Moderne avec vos couleurs - SANS CACHE CONTENU ===== */
+
+.app-header {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--secondary);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 100;
+  transition: all var(--transition-base);
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.app-header:hover::before {
+  opacity: 1;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  padding: var(--space-md) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: var(--space-sm);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  position: relative;
+}
+
+/* ===== Nav Link ===== */
+.nav-link {
+  position: relative;
+  padding: var(--space-md);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: transparent;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background: var(--secondary-light);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+/* ===== Icons ===== */
+.nav-link i {
+  font-size: 1.5rem;
+  color: var(--dark-800);
+  transition: all var(--transition-spring);
+}
+
+.nav-link:hover i {
+  color: var(--primary);
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* ===== Sidebar Toggle ===== */
+.sidebartoggler {
+  cursor: pointer;
+}
+
+.sidebartoggler:hover {
+  background: var(--primary);
+}
+
+.sidebartoggler:hover i {
+  color: white;
+  transform: scale(1.1);
+}
+
+/* ===== Notification Badge ===== */
+.notification {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 12px;
+  height: 12px;
+  background: var(--danger);
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: pulseNotification 2s ease-in-out infinite;
+}
+
+@keyframes pulseNotification {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Compteur de notifications */
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 10px rgba(239, 71, 111, 0.5);
+}
+
+/* ===== Profile Image ===== */
+.rounded-circle {
+  width: 42px;
+  height: 42px;
+  border: 3px solid var(--primary);
+  border-radius: 50%;
+  transition: all var(--transition-spring);
+  cursor: pointer;
+}
+
+.rounded-circle:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(68, 96, 69, 0.4);
+}
+
+/* ===== Dropdown Menu ===== */
+.dropdown-menu {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--secondary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-2xl);
+  padding: var(--space-md);
+  margin-top: var(--space-md);
+  min-width: 280px;
+  animation: slideDown 0.4s var(--ease-out-expo);
+}
+
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-menu .message-body {
+  padding: var(--space-sm) 0;
+}
+
+/* ===== Dropdown Item ===== */
+.dropdown-item {
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  margin-bottom: var(--space-sm);
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  text-decoration: none;
+  color: var(--dark-800);
+}
+
+.dropdown-item:hover {
+  background: var(--secondary-light);
+  border-color: var(--primary);
+  transform: translateX(8px) scale(1.02);
+  box-shadow: var(--shadow-sm);
+}
+
+.dropdown-item i {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.25rem;
+  transition: all var(--transition-spring);
+  background: var(--secondary-light);
+  border-radius: var(--radius-md);
+}
+
+.dropdown-item:hover i {
+  color: var(--primary-dark);
+  transform: scale(1.2) rotate(-10deg);
+}
+
+.dropdown-item p {
+  margin: 0;
+  color: var(--dark-800);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: color var(--transition-base);
+}
+
+.dropdown-item:hover p {
+  color: var(--primary);
+}
+
+/* ===== Logout Button ===== */
+.btn-outline-primary {
+  border: 2px solid transparent;
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-xl);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: all var(--transition-base);
+  margin-top: var(--space-md);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(68, 96, 69, 0.3);
+}
+
+.btn-outline-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: left 0.5s ease;
+}
+
+.btn-outline-primary:hover::before {
+  left: 100%;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(68, 96, 69, 0.4);
+}
+
+.btn-outline-primary:active {
+  transform: translateY(-1px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .navbar {
+    padding: var(--space-md);
+  }
+
+  .dropdown-menu {
+    min-width: 240px;
+    margin-top: var(--space-sm);
+  }
+
+  .nav-link i {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: var(--space-sm);
+  }
+
+  .rounded-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dropdown-item {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .btn-outline-primary {
+    padding: var(--space-sm) var(--space-lg);
+    font-size: 0.875rem;
+  }
+}

@@ -1,64 +1,146 @@
-/* style.css */
-body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
-}
-
-header {
-  background-color: #333;
-  color: white;
-  padding: 1rem 0;
-  text-align: center;
-}
-
-main {
-  padding: 20px;
-}
+/* ===== Dashboard Ultra-Moderne ===== */
 
 .container {
-  padding: 70px;
+  padding: var(--space-2xl);
+  padding-top: calc(85px + var(--space-2xl));
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Adaptatif */
-  grid-gap: 20px;
+  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: var(--space-xl);
+  animation: fadeIn 0.8s var(--ease-out-expo);
 }
 
+/* ===== Chart Container Glassmorphism ===== */
 .chart-container {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-lg);
+  transition: all var(--transition-base);
+  overflow: hidden;
 }
 
+/* Solid Border Effect */
+.chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.chart-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(68, 96, 69, 0.03) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+}
+
+.chart-container:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-2xl);
+  border-color: rgba(68, 96, 69, 0.4);
+}
+
+.chart-container:hover::before {
+  opacity: 1;
+}
+
+.chart-container:hover::after {
+  opacity: 1;
+}
+
+/* ===== Chart Title avec Icon ===== */
+.chart-container h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-800);
+  margin: 0 0 var(--space-xl) 0;
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--gray-100);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  position: relative;
+  letter-spacing: -0.02em;
+}
+
+.chart-container h2::before {
+  content: '';
+  width: 8px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 15px rgba(68, 96, 69, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ===== Canvas Styling ===== */
 canvas {
-  width: 100%;
-  max-height: 400px; /* Limite la hauteur pour éviter les débordements */
+  width: 100% !important;
+  max-height: 350px !important;
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) 0;
+  transition: transform var(--transition-base);
 }
 
-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 1rem 0;
-  position: fixed; /* Pour que le footer reste en bas */
-  bottom: 0;
-  width: 100%;
+.chart-container:hover canvas {
+  transform: scale(1.02);
 }
 
-
-
-.card{
-  border-radius: 12px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  -ms-border-radius: 12px;
-  -o-border-radius: 12px;
+/* ===== Card Styling ===== */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+  overflow: hidden;
+  position: relative;
 }
 
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-6px);
+  border-color: rgba(68, 96, 69, 0.3);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* ===== Loading Spinner Ultra-Moderne ===== */
 .spinner-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -66,6 +148,193 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8); /* Couleur de fond avec opacité */
-  z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+  background: rgba(15, 15, 35, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: var(--z-modal);
+  animation: fadeIn 0.3s var(--ease-out-expo);
+}
+
+.spinner-border {
+  width: 4rem;
+  height: 4rem;
+  border-width: 0.4rem;
+  border-color: var(--primary);
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: rotate 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+  box-shadow: 0 0 30px rgba(68, 96, 69, 0.5);
+  border-radius: 50%;
+}
+
+.spinner-container::after {
+  content: 'Chargement...';
+  margin-top: var(--space-lg);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+  letter-spacing: 0.5px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== Animations Avancées ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+/* ===== Staggered Animation ===== */
+.chart-container:nth-child(1) {
+  animation: fadeIn 0.6s var(--ease-out-expo) 0.1s both;
+}
+
+.chart-container:nth-child(2) {
+  animation: fadeIn 0.6s var(--ease-out-expo) 0.2s both;
+}
+
+.chart-container:nth-child(3) {
+  animation: fadeIn 0.6s var(--ease-out-expo) 0.3s both;
+}
+
+.chart-container:nth-child(4) {
+  animation: fadeIn 0.6s var(--ease-out-expo) 0.4s both;
+}
+
+/* ===== Micro-interactions ===== */
+.chart-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(68, 96, 69, 0.08) 0%,
+    transparent 40%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.chart-container:hover::after {
+  opacity: 1;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1400px) {
+  .container {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--space-lg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: var(--space-xl);
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+
+  .chart-container {
+    padding: var(--space-lg);
+  }
+
+  .chart-container h2 {
+    font-size: 1.125rem;
+  }
+
+  canvas {
+    max-height: 300px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    padding: var(--space-lg);
+    gap: var(--space-lg);
+  }
+
+  .chart-container {
+    padding: var(--space-md);
+  }
+
+  .chart-container h2 {
+    font-size: 1rem;
+  }
+
+  .chart-container h2::before {
+    width: 6px;
+    height: 24px;
+  }
+
+  canvas {
+    max-height: 250px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .chart-container {
+    border-radius: var(--radius-xl);
+    padding: var(--space-md);
+  }
+
+  .chart-container h2 {
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-md);
+  }
+
+  canvas {
+    max-height: 200px !important;
+  }
+
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+/* ===== Dark Mode Support (préparation) ===== */
+@media (prefers-color-scheme: dark) {
+  .chart-container {
+    background: var(--bg-card-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .chart-container h2 {
+    color: var(--white);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .card {
+    background: var(--bg-card-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 }

@@ -26,7 +26,7 @@ const routes: Routes = [
       {path:"addcathegorie",component:AddCathegorieComponent},
       {path:"addsouscathegorie",component:AddSouscathegorieComponent},
       {path:"addstock",component:AddStockComponent},
-      {path:"updatestock/:name",component:StockUpdateComponent},
+      {path:"updatestock/:id/:nombre/:souscat",component:StockUpdateComponent},
       {path:"stocknbre",component:StockNbreComponent},
       // {path:"addsouscathegorie",component:AddSouscathegorieComponent},
       {path:"commande",component:CommandeComponent},

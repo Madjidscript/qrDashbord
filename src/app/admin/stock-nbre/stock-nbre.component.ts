@@ -78,7 +78,7 @@ export class StockNbreComponent implements OnInit {
     }
   }
 
-  nav(name:any): void {
-    this.router.navigate([`/admin/updatestock/${name}`]);
+  nav(id: any, nombre: any, souscat: any): void {
+    this.router.navigate([`/admin/updatestock/${id}/${nombre}/${souscat}`]);
   }
 }

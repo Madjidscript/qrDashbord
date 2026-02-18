@@ -49,7 +49,7 @@ export class PushserviceService {
   // Écouter les notifications entrantes
   listenToMessages() {
     this.swPush.messages.subscribe((message:any) => {
-      console.log('📩 Notification reçue', message);
+      console.log('📩 Notification reçue.', message);
       alert(message['message'] || 'Nouvelle notification reçue');
     });
   }
