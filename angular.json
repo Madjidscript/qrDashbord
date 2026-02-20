@@ -35,17 +35,13 @@
               "src/favicon"
             ],
             "styles": [
-              "src/assets/css/styles.css",
+              
               "src/styles.css"
+            
             ],
             "scripts": [
               "src/assets/js/jquery-3.7.1.min.js",
-              "src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "src/assets/js/sidebarmenu.js",
-              "src/assets/js/app.min.js",
-              "src/assets/libs/apexcharts/dist/apexcharts.min.js",
-              "src/assets/libs/simplebar/dist/simplebar.js",
-              "src/assets/js/dashboard.js",
+              "src/assets/js/jquery-3.7.1.js", 
               "src/assets/vendors/datatables.net/jquery.dataTables.js",
               "src/assets/js/dataTables.js",
               "src/assets/js/dataTables.buttons.js",
@@ -77,9 +73,9 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kb"
-                }
+                  "maximumWarning": "10kb",
+                  "maximumError": "15kb"
+                } 
               ],
               "outputHashing": "all"
             },
