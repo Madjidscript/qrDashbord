@@ -1,11 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
-
+import { environment } from '../../../environnement/environnement.prod';
 
 declare const bootstrap: any;
-declare var $: any;
 
 @Component({
   selector: 'app-add-souscathegorie',
@@ -16,150 +15,175 @@ declare var $: any;
   styleUrls: ['./add-souscathegorie.component.css']
 })
 export class AddSouscathegorieComponent implements OnInit {
-  @ViewChild('preview') previewImage!: ElementRef;
-  @ViewChild('fileInput') fileInput!: ElementRef;
-
+  sousCathegories: any[] = [];
+  categories: any[] = [];
+  loading: boolean = false;
+  isEditMode: boolean = false;
+  selectedId: string = '';
+  previewUrl: string | null = null;
   file: File | null = null;
-  data: any;
+  private modalRef: any = null;
+  readonly apiUrl = environment.apiUrl + '/';
 
-  constructor(private api: AdminService) { }
+  getImageUrl(path: string): string {
+    if (!path) return '';
+    return path.startsWith('http') ? path : this.apiUrl + path.replace(/\\/g, '/');
+  }
+
+  constructor(private api: AdminService) {}
 
   sousCathegorieData: FormGroup = new FormGroup({
-    nom: new FormControl("", Validators.required),
-    prix: new FormControl("", Validators.required),
-    id_cath: new FormControl("", Validators.required),
-    image: new FormControl(null)
+    nom: new FormControl('', Validators.required),
+    prix: new FormControl('', Validators.required),
+    id_cath: new FormControl('', Validators.required),
   });
 
   ngOnInit() {
-    this.getAllCathegories();
+    this.getAllSousCathegories();
+    this.getAllCategories();
   }
 
-  ngAfterViewInit(): void {
-    if (typeof $ !== 'undefined') {
-      $('.dropify').dropify();
-      $('.dropify').on('change', (event: any) => {
-        this.onFileChange(event);
-      });
-    }
-
-    console.log('File input initialized:', this.fileInput);
+  getAllSousCathegories() {
+    this.loading = true;
+    this.api.AllSousCathe().subscribe({
+      next: (res: any) => {
+        this.sousCathegories = res.recup || [];
+      },
+      error: () => {
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
   }
 
-  openFileInput() {
-    if (this.fileInput) {
-      this.fileInput.nativeElement.click();
-    } else {
-      console.error('fileInput is not available yet');
+  getAllCategories() {
+    this.api.AllCathe().subscribe({
+      next: (res: any) => {
+        this.categories = res.recup || [];
+      },
+      error: (err: any) => {
+        console.log('Error fetching categories:', err);
+      }
+    });
+  }
+
+  openCreateModal() {
+    this.isEditMode = false;
+    this.selectedId = '';
+    this.previewUrl = null;
+    this.file = null;
+    this.sousCathegorieData.reset();
+    this.showModal();
+  }
+
+  openEditModal(item: any) {
+    this.isEditMode = true;
+    this.selectedId = item._id;
+    this.previewUrl = this.getImageUrl(item.image) || null;
+    this.file = null;
+    this.sousCathegorieData.patchValue({
+      nom: item.nom,
+      prix: item.prix,
+      id_cath: item.id_cath?._id || item.id_cath
+    });
+    this.showModal();
+  }
+
+  private showModal() {
+    const el = document.getElementById('sousCategorieModal');
+    if (el) {
+      this.modalRef = new bootstrap.Modal(el);
+      this.modalRef.show();
     }
+  }
+
+  private hideModal() {
+    if (this.modalRef) {
+      this.modalRef.hide();
+    }
+  }
+
+  triggerFileInput() {
+    const input = document.getElementById('fileInputSous') as HTMLInputElement;
+    if (input) input.click();
   }
 
   onFileChange(event: any) {
-    console.log(event);
-    let file = event.target.files[0];
-    if (file) {
-      this.file = file;
+    const f = event.target.files[0];
+    if (f) {
+      this.file = f;
       const reader = new FileReader();
-      reader.onload = () => {
-        if (this.previewImage) {
-          this.previewImage.nativeElement.src = reader.result as string;
-        }
-      };
-      reader.readAsDataURL(file);
+      reader.onload = () => { this.previewUrl = reader.result as string; };
+      reader.readAsDataURL(f);
     }
-  }
-
-  getAllCathegories() {
-    this.api.AllCathe().subscribe({
-      next: (res: any) => {
-        this.data = res.recup;
-        console.log("Categories fetched:", this.data);
-      },
-      error: (err: any) => {
-        console.log("Error fetching categories:", err);
-      },
-      complete: () => {
-        console.log("API request completed");
-      }
-    });
   }
 
   validation(event: Event) {
     event.preventDefault();
-
-    if (this.sousCathegorieData.invalid || !this.file) {
-        
+    if (this.sousCathegorieData.invalid) {
+      this.showErrorToast('Veuillez remplir tous les champs');
+      return;
+    }
+    if (!this.isEditMode && !this.file) {
+      this.showErrorToast('Veuillez sélectionner une image');
       return;
     }
 
-    const formData: FormData = new FormData();
-    formData.append("nom", this.sousCathegorieData.get("nom")?.value);
-    formData.append("prix", this.sousCathegorieData.get("prix")?.value);
-    formData.append("id_cath", this.sousCathegorieData.get("id_cath")?.value);
-    formData.append("image", this.file as File);
-    console.log("my file",this.file);
+    const formData = new FormData();
+    formData.append('nom', this.sousCathegorieData.get('nom')?.value);
+    formData.append('prix', this.sousCathegorieData.get('prix')?.value);
+    formData.append('id_cath', this.sousCathegorieData.get('id_cath')?.value);
+    if (this.file) formData.append('image', this.file);
 
+    if (this.isEditMode) {
+      this.api.UpdateSousCathe(this.selectedId, formData).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllSousCathegories();
+            this.hideModal();
+            this.showSuccessToast('Sous-catégorie modifiée avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la modification')
+      });
+    } else {
+      this.api.AddSousCathe(formData).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllSousCathegories();
+            this.hideModal();
+            this.showSuccessToast('Sous-catégorie créée avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la création')
+      });
+    }
+  }
 
-    console.log("Form validation status:", this.sousCathegorieData.valid);
-
-    this.api.AddSousCathe(formData).subscribe({
-      next: (res: any) => {
-        console.log("Response:", res);
-
-        if (res?.status === 'success') {
-          this.data = res;
-
-          this.showSuccessToast("creation de souscath valider")
-
-        }
+  deleteSousCathegorie(id: string) {
+    if (!confirm('Confirmer la suppression de cette sous-catégorie ?')) return;
+    this.api.DeleteSousCathe(id).subscribe({
+      next: () => {
+        this.getAllSousCathegories();
+        this.showSuccessToast('Sous-catégorie supprimée');
       },
-
-      error: (err: any) => {
-       this.showErrorToast("erreur lor de la creation de soucath")
-      },
-
-      complete: () => {
-        console.log("API request completed");
-      }
+      error: () => this.showErrorToast('Erreur lors de la suppression')
     });
   }
 
-
-
-
-
-
-
-
-
-
-   //  fonction pour les toast
-
-   showSuccessToast(message: string) {
-    const toastBody = document.getElementById('successToastBody');
-    if (toastBody) { 
-        toastBody.textContent = message; 
-        this.sousCathegorieData.reset()
-    } else {
-        console.warn('Success toast body element not found.');
-    }
-    
-    const toastElement = document.getElementById('successToast');
-    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
-    toast.show();
+  showSuccessToast(message: string) {
+    const body = document.getElementById('successToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('successToast');
+    if (el) new bootstrap.Toast(el, { delay: 2500 }).show();
   }
-  
+
   showErrorToast(message: string) {
-    const toastBody = document.getElementById('errorToastBody');
-    if (toastBody) { 
-        toastBody.textContent = message; 
-    } else {
-        console.warn('Error toast body element not found.');
-    }
-    
-    const toastElement = document.getElementById('errorToast');
-    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
-    toast.show();
+    const body = document.getElementById('errorToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('errorToast');
+    if (el) new bootstrap.Toast(el, { delay: 3000 }).show();
   }
-  
 }

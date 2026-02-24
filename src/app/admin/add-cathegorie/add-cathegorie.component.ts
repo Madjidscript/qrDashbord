@@ -1,13 +1,10 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild } from '@angular/core';
-import {  FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
-
-
-
+import { environment } from '../../../environnement/environnement.prod';
 
 declare const bootstrap: any;
-declare var $: any;
 
 @Component({
   selector: 'app-add-cathegorie',
@@ -18,121 +15,158 @@ declare var $: any;
   styleUrls: ['./add-cathegorie.component.css']
 })
 export class AddCathegorieComponent implements OnInit {
-  @ViewChild('preview') previewImage!: ElementRef;
-  @ViewChild('fileInput') fileInput!: ElementRef;
-
+  categories: any[] = [];
+  loading: boolean = false;
+  isEditMode: boolean = false;
+  selectedId: string = '';
+  previewUrl: string | null = null;
   file: File | null = null;
-  data: any;
+  private modalRef: any = null;
+  readonly apiUrl = environment.apiUrl+'/';
 
-  constructor(private api: AdminService) { }
-
-  cathegorieData: FormGroup = new FormGroup({
-    nom: new FormControl("", Validators.required),
-    image: new FormControl(null)
-  });
-
-  ngOnInit() { }
-
-  ngAfterViewInit(): void {
-    if (typeof $ !== 'undefined') {
-      $('.dropify').dropify();
-      $('.dropify').on('change', (event: any) => {
-        this.onFileChange(event);
-      });
-    }
-
-    console.log('File input initialized:', this.fileInput);
+  getImageUrl(path: string): string {
+    if (!path) return '';
+    return path.startsWith('http') ? path : this.apiUrl + path.replace(/\\/g, '/');
   }
 
-  openFileInput() {
-    if (this.fileInput) {
-      this.fileInput.nativeElement.click();
-    } else {
-      console.error('fileInput is not available yet');
+  // formatImagePath(path: string): string {
+  //   return this.baseUrl + path.replace(/\\/g, '/');
+  // }
+
+  constructor(private api: AdminService) {}
+
+  cathegorieData: FormGroup = new FormGroup({
+    nom: new FormControl('', Validators.required),
+  });
+
+  ngOnInit() {
+    this.getAllCategories();
+  }
+
+  getAllCategories() {
+    this.loading = true;
+    this.api.AllCathe().subscribe({
+      next: (res: any) => {
+        this.categories = res.recup || [];
+      },
+      error: () => {
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  openCreateModal() {
+    this.isEditMode = false;
+    this.selectedId = '';
+    this.previewUrl = null;
+    this.file = null;
+    this.cathegorieData.reset();
+    this.showModal();
+  }
+
+  openEditModal(item: any) {
+    this.isEditMode = true;
+    this.selectedId = item._id;
+    this.previewUrl = item.image || null;
+    this.file = null;
+    this.cathegorieData.patchValue({ nom: item.nom });
+    this.showModal();
+  }
+
+  private showModal() {
+    const el = document.getElementById('categorieModal');
+    if (el) {
+      this.modalRef = new bootstrap.Modal(el);
+      this.modalRef.show();
     }
+  }
+
+  private hideModal() {
+    if (this.modalRef) {
+      this.modalRef.hide();
+    }
+  }
+
+  triggerFileInput() {
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    if (input) input.click();
   }
 
   onFileChange(event: any) {
-    console.log(event);
-    let file = event.target.files[0];
-    if (file) {
-      this.file = file;
+    const f = event.target.files[0];
+    if (f) {
+      this.file = f;
       const reader = new FileReader();
-      reader.onload = () => {
-        if (this.previewImage) {
-          this.previewImage.nativeElement.src = reader.result as string;
-        }
-      };
-      reader.readAsDataURL(file);
+      reader.onload = () => { this.previewUrl = reader.result as string; };
+      reader.readAsDataURL(f);
     }
   }
 
   validation(event: Event) {
     event.preventDefault();
-
-    if (this.cathegorieData.invalid || !this.file) {
-      this.showErrorToast("selectionner une image")
+    if (this.cathegorieData.invalid) {
+      this.showErrorToast('Veuillez saisir le nom de la catégorie');
+      return;
+    }
+    if (!this.isEditMode && !this.file) {
+      this.showErrorToast('Veuillez sélectionner une image');
       return;
     }
 
-    const formData: FormData = new FormData();
-    formData.append("nom", this.cathegorieData.get("nom")?.value);
-    formData.append("image", this.file as File);
-    console.log("my file",this.file);
-    
+    const formData = new FormData();
+    formData.append('nom', this.cathegorieData.get('nom')?.value);
+    if (this.file) formData.append('image', this.file);
 
-    console.log("Form validation status:", this.cathegorieData.valid);
+    if (this.isEditMode) {
+      this.api.UpdateCathe(this.selectedId, formData).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllCategories();
+            this.hideModal();
+            this.showSuccessToast('Catégorie modifiée avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la modification')
+      });
+    } else {
+      this.api.AddCathe(formData).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllCategories();
+            this.hideModal();
+            this.showSuccessToast('Catégorie créée avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la création')
+      });
+    }
+  }
 
-    this.api.AddCathe(formData).subscribe({
-      next: (res: any) => {
-        console.log("Response:", res);
-
-        if (res?.status === 'success') {
-          this.data = res    
-          this.showSuccessToast("cathegorie creer avec success")
-        } 
-     },
-
-      error: (err: any) => {
-        console.log("Error:", err);
-        this.showErrorToast("erreur lors de la creation")
-       
+  deleteCategorie(id: string) {
+    if (!confirm('Confirmer la suppression de cette catégorie ?')) return;
+    this.api.DeleteCathe(id).subscribe({
+      next: () => {
+        this.getAllCategories();
+        this.showSuccessToast('Catégorie supprimée');
       },
-
-      complete: () => {
-        console.log("API request completed");
-      }
+      error: () => this.showErrorToast('Erreur lors de la suppression')
     });
   }
 
-
-//  fonction pour les toast
-
   showSuccessToast(message: string) {
-    const toastBody = document.getElementById('successToastBody');
-    if (toastBody) { 
-        toastBody.textContent = message; 
-        this.cathegorieData.reset()
-    } else {
-        console.warn('Success toast body element not found.');
-    }
-    
-    const toastElement = document.getElementById('successToast');
-    const toast = new bootstrap.Toast(toastElement, { delay: 2000 });
-    toast.show();
+    const body = document.getElementById('successToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('successToast');
+    if (el) new bootstrap.Toast(el, { delay: 2500 }).show();
   }
-  
+
   showErrorToast(message: string) {
-    const toastBody = document.getElementById('errorToastBody');
-    if (toastBody) { 
-        toastBody.textContent = message; 
-    } else {
-        console.warn('Error toast body element not found.');
-    }
-    
-    const toastElement = document.getElementById('errorToast');
-    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
-    toast.show();
+    const body = document.getElementById('errorToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('errorToast');
+    if (el) new bootstrap.Toast(el, { delay: 3000 }).show();
   }
-  
 }

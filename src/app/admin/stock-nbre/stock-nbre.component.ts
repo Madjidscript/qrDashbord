@@ -1,84 +1,148 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, PLATFORM_ID } from '@angular/core';
 
-declare const feather: any;
-declare var $: any;
+declare const bootstrap: any;
 
 @Component({
   selector: 'app-stock-nbre',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './stock-nbre.component.html',
   styleUrls: ['./stock-nbre.component.css']
 })
 export class StockNbreComponent implements OnInit {
-  data: any = [];
-  loading = false;
-  isBrowser: boolean;
+  stocks: any[] = [];
+  sousCathegories: any[] = [];
+  loading: boolean = false;
+  isEditMode: boolean = false;
+  selectedId: string = '';
+  private modalRef: any = null;
 
-  constructor(
-    private api: AdminService,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: any
-  ) {
-    // Vérifie si le code s'exécute dans le navigateur
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  constructor(private api: AdminService) {}
 
-  ngOnInit(): void {
-    // Vérifie si jQuery est chargé
-    if (this.isBrowser && typeof $ !== 'undefined') {
-      console.log('jQuery est chargé');
-    } else {
-      console.log('jQuery n\'est pas chargé');
-    }
+  stockForm: FormGroup = new FormGroup({
+    nombre: new FormControl('', Validators.required),
+    id_Souscat: new FormControl('', Validators.required)
+  });
 
+  ngOnInit() {
     this.getAllStock();
+    this.getAllSousCath();
   }
 
-  getAllStock(): void {
+  getAllStock() {
     this.loading = true;
-
     this.api.AllStock().subscribe({
       next: (res: any) => {
-        this.data = res || [];
-        console.log('Données du stock :', this.data);
-
-        // Initialise DataTables une fois les données chargées
-        if (this.isBrowser && typeof $ !== 'undefined') {
-          setTimeout(() => {
-            this.initDataTable();
-          }, 200);
-        }
+        this.stocks = res || [];
       },
-      error: (err: any) => {
-        console.error('Erreur lors de la récupération des stocks', err);
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      },
+      error: () => { this.loading = false; },
+      complete: () => { this.loading = false; }
     });
   }
 
-  initDataTable(): void {
-    // Vérifie si le DOM et jQuery sont disponibles
-    if (typeof $ !== 'undefined' && $('table').length > 0) {
-      $('table').DataTable({
-        dom: '<"d-flex justify-content-between"<"btn-group"B><"search-box"f>>t<"d-flex justify-content-between"ip>',
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-      });
-      console.log('DataTable initialisé avec succès');
-    } else {
-      console.log('Impossible d\'initialiser DataTable : table non trouvée');
+  getAllSousCath() {
+    this.api.AllSousCathe().subscribe({
+      next: (res: any) => {
+        this.sousCathegories = res.recup || [];
+      }
+    });
+  }
+
+  openCreateModal() {
+    this.isEditMode = false;
+    this.selectedId = '';
+    this.stockForm.reset();
+    this.showModal();
+  }
+
+  openEditModal(item: any) {
+    this.isEditMode = true;
+    this.selectedId = item._id;
+    this.stockForm.patchValue({
+      nombre: item.nombre,
+      id_Souscat: item.id_Souscat?._id || item.id_Souscat
+    });
+    this.showModal();
+  }
+
+  private showModal() {
+    const el = document.getElementById('stockModal');
+    if (el) {
+      this.modalRef = new bootstrap.Modal(el);
+      this.modalRef.show();
     }
   }
 
-  nav(id: any, nombre: any, souscat: any): void {
-    this.router.navigate([`/admin/updatestock/${id}/${nombre}/${souscat}`]);
+  private hideModal() {
+    if (this.modalRef) this.modalRef.hide();
+  }
+
+  validation(event: Event) {
+    event.preventDefault();
+    if (this.stockForm.invalid) {
+      this.showErrorToast('Veuillez remplir tous les champs');
+      return;
+    }
+
+    if (this.isEditMode) {
+      const body = {
+        _id: this.selectedId,
+        nombre: this.stockForm.get('nombre')?.value,
+        id_Souscat: this.stockForm.get('id_Souscat')?.value
+      };
+      this.api.UpdateStock(body).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllStock();
+            this.hideModal();
+            this.showSuccessToast('Stock modifié avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la modification')
+      });
+    } else {
+      const body = {
+        nombre: this.stockForm.get('nombre')?.value,
+        id_Souscat: this.stockForm.get('id_Souscat')?.value
+      };
+      this.api.AddStock(body).subscribe({
+        next: (res: any) => {
+          if (res?.status === 'success') {
+            this.getAllStock();
+            this.hideModal();
+            this.showSuccessToast('Stock ajouté avec succès');
+          }
+        },
+        error: () => this.showErrorToast('Erreur lors de la création')
+      });
+    }
+  }
+
+  deleteStock(id: string) {
+    if (!confirm('Confirmer la suppression de ce stock ?')) return;
+    this.api.DeleteStock(id).subscribe({
+      next: () => {
+        this.getAllStock();
+        this.showSuccessToast('Stock supprimé');
+      },
+      error: () => this.showErrorToast('Erreur lors de la suppression')
+    });
+  }
+
+  showSuccessToast(message: string) {
+    const body = document.getElementById('successToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('successToast');
+    if (el) new bootstrap.Toast(el, { delay: 2500 }).show();
+  }
+
+  showErrorToast(message: string) {
+    const body = document.getElementById('errorToastBody');
+    if (body) body.textContent = message;
+    const el = document.getElementById('errorToast');
+    if (el) new bootstrap.Toast(el, { delay: 3000 }).show();
   }
 }

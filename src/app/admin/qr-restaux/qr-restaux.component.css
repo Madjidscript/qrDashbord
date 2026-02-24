@@ -291,6 +291,130 @@ textarea.form-control { resize: vertical; }
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===== Add Button ===== */
+.btn-add {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 15px rgba(68, 96, 69, 0.3);
+  font-family: var(--font-sans);
+}
+
+.btn-add:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(68, 96, 69, 0.4);
+}
+
+/* ===== Modal ===== */
+.modal-content {
+  border-radius: var(--radius-xl);
+  border: none;
+  box-shadow: var(--shadow-2xl);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: var(--primary);
+  color: white;
+  border-bottom: none;
+  padding: var(--space-lg) var(--space-xl);
+}
+
+.modal-header .modal-title {
+  font-weight: 700;
+  color: white;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+.modal-body {
+  padding: var(--space-xl);
+}
+
+.modal-footer {
+  border-top: 1px solid var(--gray-100);
+  padding: var(--space-lg) var(--space-xl);
+  gap: var(--space-md);
+}
+
+.form-group {
+  margin-bottom: var(--space-xl);
+}
+
+.form-label {
+  color: var(--dark-800);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  font-size: 1rem;
+  background: var(--gray-50);
+  color: var(--dark-800);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(68, 96, 69, 0.1);
+  outline: none;
+  background: white;
+}
+
+.btn-cancel-modal {
+  background: var(--gray-100);
+  color: var(--dark-800);
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+}
+
+.btn-cancel-modal:hover {
+  background: var(--gray-200);
+}
+
+.btn-submit-modal {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 15px rgba(68, 96, 69, 0.3);
+  font-family: var(--font-sans);
+}
+
+.btn-submit-modal:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(68, 96, 69, 0.4);
+}
+
 @media (max-width: 768px) {
   .container-fluid { padding: var(--space-lg); }
   .booking-form { padding: var(--space-lg); }

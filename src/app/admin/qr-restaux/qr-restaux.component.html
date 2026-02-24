@@ -1,50 +1,72 @@
 
-<div class="spinner-container" *ngIf="loading" >
+<div class="spinner-container" *ngIf="loading">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-      <div>
-        <h2 class="mb-3 mb-md-0 text-primary">liste Qr</h2>
-      </div>
-  
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h2 class="mb-3 mb-md-0 text-primary">Liste QR</h2>
     </div>
-    <hr>
-  
-    <div id="room-creation" class="section" style="margin-top: 5;">
-      <div class="section-center">
-        <div class="container">
-          <div class="row">
-            <div class="booking-form">
-              <div class="form-header">
-                <h6 class="title-centered">liste Qr</h6>
-              </div>
-
-              <div class="qr-container" *ngIf="!loading" >
-                <!-- QR Code 1 -->
-                <div class="qr-card" *ngFor="let item of data">
-                  <div class="qr-number" style="margin-bottom: 25px;">{{item.number}} </div>
-                  <div class="qr-image"><img [src]="item.qrCodeData" alt=""></div>
-                  <div class="qr-label"style="margin-top: 25px;" >Table <span>{{item.number}}</span></div>
-                </div>
-            
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
+    <button class="btn-add" (click)="openCreateModal()">
+      <i class="ti ti-plus"></i> Créer QR
+    </button>
   </div>
-  
-  
-  
-  
-  
+  <hr>
 
+  <div class="booking-form">
+    <div class="form-header">
+      <h6 class="title-centered">Liste QR</h6>
+    </div>
 
+    <div class="qr-container" *ngIf="!loading">
+      <div class="qr-card" *ngFor="let item of data">
+        <div class="qr-number">{{item.number}}</div>
+        <div class="qr-image"><img [src]="item.qrCodeData" alt="QR {{item.number}}"></div>
+        <div class="qr-label">Table <span>{{item.number}}</span></div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Modal Créer QR -->
+<div class="modal fade" id="createQrModal" tabindex="-1" aria-labelledby="createQrModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createQrModalLabel">Créer un QR code</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="qrForm">
+          <div class="form-group">
+            <label class="form-label" for="number">Numéro de table</label>
+            <input class="form-control" type="number" id="number" formControlName="number" placeholder="Ex: 1, 2, 3...">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn-submit-modal" (click)="createQr($event)">Créer</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="successToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+  <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="errorToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

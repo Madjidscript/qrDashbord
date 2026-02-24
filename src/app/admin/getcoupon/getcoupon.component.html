@@ -1,76 +1,149 @@
-<!-- Modal de confirmation -->
-<div class="spinner-container" *ngIf="loading" >
+
+<div class="spinner-container" *ngIf="loading">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-      <div>
-        <h2 class="mb-3 mb-md-0 text-primary " style="text-align: center;">liste Coupon</h2>
-      </div>
-  
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h2 class="mb-3 mb-md-0 text-primary">Coupons</h2>
     </div>
-    <hr>
+    <button class="btn-add" (click)="openCreateModal()">
+      <i class="ti ti-plus"></i> Ajouter un coupon
+    </button>
+  </div>
+  <hr>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover text-center align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Code</th>
-          <th>Réduction</th>
-          <th>Type</th>
-          <th>Expiration</th>
-          <th>Utilisé</th>
-          <th>Statut</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="!loading">
-        <tr *ngFor="let coupon of coupons">
-          <td [ngClass]="{ 'text-muted': !coupon.isActive   }">
-            {{ coupon.code }}
-          </td>
-          <td>
-            {{ coupon.reduction }}{{ coupon.isPercentage ? '%' : ' FCFA' }}
-          </td>
-          <td>{{ coupon.isPercentage ? 'Pourcentage' : 'Fixe' }}</td>
-          <td>{{ coupon.expirationDate | date: 'shortDate' }}</td>
-          <td>{{ coupon.usedCount || 0 }} / {{ coupon.maxUsage }}</td>
-          <td>
-            <span class="badge" [ngClass]="coupon.isActive ? 'bg-success' : 'bg-secondary'">
-              {{ coupon.isActive ? 'Actif' : 'Inactif' }}
-            </span>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-danger" (click)="askDeleteCoupon(coupon._id)">
-              Supprimer
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="booking-form">
+    <div class="form-header">
+      <h6 class="title-centered">Liste des Coupons</h6>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && coupons.length === 0">
+      <i class="ti ti-ticket"></i>
+      <h3>Aucun coupon</h3>
+      <p>Cliquez sur "Ajouter un coupon" pour en créer un.</p>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive" *ngIf="coupons.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Réduction</th>
+            <th>Type</th>
+            <th>Expiration</th>
+            <th>Utilisé</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let coupon of coupons">
+            <td [class.text-muted]="!coupon.isActive">{{ coupon.code }}</td>
+            <td>{{ coupon.reduction }}{{ coupon.isPercentage ? '%' : ' DH' }}</td>
+            <td>{{ coupon.isPercentage ? 'Pourcentage' : 'Fixe' }}</td>
+            <td>{{ coupon.expirationDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ coupon.usedCount || 0 }} / {{ coupon.maxUsage }}</td>
+            <td>
+              <span class="status-badge" [class.active]="coupon.isActive" [class.inactive]="!coupon.isActive">
+                {{ coupon.isActive ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action btn-delete" (click)="askDeleteCoupon(coupon._id)" title="Supprimer">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<!-- Modal de confirmation -->
+<!-- Modal Créer Coupon -->
+<div class="modal fade" id="createCouponModal" tabindex="-1" aria-labelledby="createCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createCouponModalLabel">Ajouter un coupon</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="couponForm">
+          <div class="row">
+            <div class="col-md-12 form-group">
+              <label class="form-label">Code</label>
+              <input type="text" class="form-control" formControlName="code" placeholder="Ex: BIENVENUE10">
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Réduction</label>
+              <input type="number" class="form-control" formControlName="reduction" placeholder="Ex: 10">
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Type de réduction</label>
+              <select class="form-control" formControlName="isPercentage">
+                <option [value]="true">Pourcentage (%)</option>
+                <option [value]="false">Montant fixe (DH)</option>
+              </select>
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Date d'expiration</label>
+              <input type="date" class="form-control" formControlName="expirationDate">
+            </div>
+            <div class="col-md-6 form-group">
+              <label class="form-label">Utilisation max</label>
+              <input type="number" class="form-control" formControlName="maxUsage" placeholder="Ex: 100">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn-submit-modal" (click)="createCoupon($event)">Créer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmation suppression -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="confirmDeleteLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         Voulez-vous vraiment supprimer ce coupon ?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Supprimer</button>
+        <button type="button" class="btn-cancel-modal" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn-delete-confirm" (click)="confirmDelete()">Supprimer</button>
       </div>
     </div>
   </div>
 </div>
 
-
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="successToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+  <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="errorToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

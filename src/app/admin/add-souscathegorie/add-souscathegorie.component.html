@@ -1,105 +1,135 @@
+
+<div class="spinner-container" *ngIf="loading">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-      <div>
-        <h2 class="mb-3 mb-md-0 text-primary">Create Sous-Cathegorie</h2>
-      </div>
-  
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h2 class="mb-3 mb-md-0 text-primary">Sous-Catégories</h2>
     </div>
-    <hr>
-  
-    <div id="room-creation" class="section" style="margin-top: 5;">
-      <div class="section-center">
-        <div class="container">
-          <div class="row">
-            <div class="booking-form">
-              <div class="form-header">
-                <h6 class="title-centered">Create Sous-Cathegorie</h6>
+    <button class="btn-add" (click)="openCreateModal()">
+      <i class="ti ti-plus"></i> Ajouter une sous-catégorie
+    </button>
+  </div>
+  <hr>
+
+  <div class="booking-form">
+    <div class="form-header">
+      <h6 class="title-centered">Liste des Sous-Catégories</h6>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && sousCathegories.length === 0">
+      <i class="ti ti-category-2"></i>
+      <h3>Aucune sous-catégorie</h3>
+      <p>Cliquez sur "Ajouter" pour créer votre première sous-catégorie.</p>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive" *ngIf="sousCathegories.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Catégorie</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of sousCathegories">
+            <td>
+              <img [src]="getImageUrl(item.image)" [alt]="item.nom" class="cat-img">
+            </td>
+            <td>{{ item.nom }}</td>
+            <td>{{ item.prix }} Fcfa</td>
+            <td>{{ item.id_cath?.nom || '—' }}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action btn-edit" (click)="openEditModal(item)" title="Modifier">
+                  <i class="ti ti-edit"></i>
+                </button>
+                <button class="btn-action btn-delete" (click)="deleteSousCathegorie(item._id)" title="Supprimer">
+                  <i class="ti ti-trash"></i>
+                </button>
               </div>
-  
-              <form  [formGroup]="sousCathegorieData"  method="POST"  class="form-groupe" >
-                <div class="row">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="forme-label" for="nom">Sous-Cathegorie</label>
-                      <input class="form-control" type="text" name="nom" id="nom" placeholder="Enter nom"
-                      formControlName="nom" required>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="forme-label" for="prix"> Prix</label>
-                      <input class="form-control" type="number" name="prix" id="prix"
-                        placeholder="Enter Room price"formControlName="prix" required>
-                    </div>
-                  </div>
-                  
-  
-                  
-
-                  <div class="col-md-6 mb-3">
-                    <div class="form-group">
-                      <label class="form-label" for="id_cath">Catégorie</label>
-                      <select class="form-control" name="id_cath" id="id_cath" formControlName="id_cath"  required>
-                        <option value=""  selected hidden>Select Category</option>
-                        <option *ngFor="let item of data" [value]="item._id"> {{item.nom}} </option>
-                        
-                      </select>
-                    </div>
-                  </div>
-
-
-                  <div class="row mb-3">
-                    <label class="form-label" for="image">Sous-Cathegorie Image</label>
-    
-                    <div class="drop-img">
-                      <input type="file" class="dropify" formControlName="image"  data-file-type="image" />
-                    </div>
-                  </div>
-  
-                  
-                </div>
-
-                <div class="form-btn">
-                  <button class="btn btn-danger" type="button"  >cancel</button>
-                  <button type="submit" class="btn btn-light-primary submit-btn" (click)="validation($event)"  >Create Sous-Cathegorie</button>
-                  
-                </div>
-              
-  
-        
-              </form>
-            </div>
+<!-- Modal Sous-Catégorie -->
+<div class="modal fade" id="sousCategorieModal" tabindex="-1" aria-labelledby="sousCategorieModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sousCategorieModalLabel">
+          {{ isEditMode ? 'Modifier la sous-catégorie' : 'Ajouter une sous-catégorie' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="sousCathegorieData">
+          <div class="form-group">
+            <label class="form-label" for="nom">Nom</label>
+            <input class="form-control" type="text" id="nom" formControlName="nom" placeholder="Ex: Coca-Cola, Burger...">
           </div>
-        </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prix">Prix (DH)</label>
+            <input class="form-control" type="number" id="prix" formControlName="prix" placeholder="Ex: 25">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="id_cath">Catégorie</label>
+            <select class="form-control" id="id_cath" formControlName="id_cath">
+              <option value="" selected hidden>Sélectionner une catégorie</option>
+              <option *ngFor="let cat of categories" [value]="cat._id">{{ cat.nom }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Image</label>
+            <div class="file-upload-area" (click)="triggerFileInput()">
+              <img *ngIf="previewUrl" [src]="previewUrl" class="file-preview" alt="preview">
+              <div *ngIf="!previewUrl" class="file-upload-placeholder">
+                <i class="ti ti-photo"></i>
+                <span>Cliquez pour sélectionner une image</span>
+              </div>
+            </div>
+            <input type="file" id="fileInputSous" accept="image/*" (change)="onFileChange($event)" style="display:none">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn-submit-modal" (click)="validation($event)">
+          {{ isEditMode ? 'Modifier' : 'Créer' }}
+        </button>
       </div>
     </div>
-  
   </div>
-  
-  
-  
-  
-  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
-    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive"
-        aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body" id="successToastBody">
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                aria-label="Close"></button>
-        </div>
-    </div>
-  
-    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
-        aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body" id="errorToastBody">
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                aria-label="Close"></button>
-        </div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="successToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-  
+  <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="errorToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

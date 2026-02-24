@@ -40,12 +40,28 @@ export class AdminService {
     return this.http.post(this.api_url+"/admin/cathegories",body);
   }
 
+  UpdateCathe(id:string, body:any) {
+    return this.http.put(this.api_url+`/admin/cathegories/${id}`,body);
+  }
+
+  DeleteCathe(id:string) {
+    return this.http.delete(this.api_url+`/admin/cathegories/${id}`);
+  }
+
   AllSousCathe() {
     return this.http.get(this.api_url+"/admin/souscathegories", );
   }
 
   AddSousCathe(body:any) {
     return this.http.post(this.api_url+"/admin/souscathegories",body);
+  }
+
+  UpdateSousCathe(id:string, body:any) {
+    return this.http.put(this.api_url+`/admin/souscathegories/${id}`,body);
+  }
+
+  DeleteSousCathe(id:string) {
+    return this.http.delete(this.api_url+`/admin/souscathegories/${id}`);
   }
   AllStock() {
     return this.http.get(this.api_url+"/admin/stocks", );
@@ -57,6 +73,10 @@ export class AdminService {
 
   UpdateStock(body:any) {
     return this.http.post(this.api_url+"/admin/stockUpdates",body);
+  }
+
+  DeleteStock(id:string) {
+    return this.http.delete(this.api_url+`/admin/stocks/${id}`);
   }
 
   AllQr() {

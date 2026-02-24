@@ -1,73 +1,115 @@
 
-
-<div class="spinner-container" *ngIf="loading" >
+<div class="spinner-container" *ngIf="loading">
   <div class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
-
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
-      <div>
-        <h2 class="mb-3 mb-md-0 text-primary">liste Stock</h2>
-      </div>
-  
+  <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+    <div>
+      <h2 class="mb-3 mb-md-0 text-primary">Stock</h2>
     </div>
-    <hr>
-  
-    <div id="room-creation" class="section" style="margin-top: 5;">
-      <div class="section-center">
-        <div class="container">
-          <div class="row">
-            <div class="booking-form">
-              <div class="form-header">
-                <h6 class="title-centered">liste stock</h6>
-              </div>
-
-
-              <div class="table-container">
-                <table class="styled-table" *ngIf="!loading">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Sous-catégorie</th>
-                       <th>prix</th>
-                      <th>Stock</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody >
-                    <tr *ngFor="let item of data;let i = index">
-                      <td> {{i+1}} </td>
-                      <td> {{item.id_Souscat?.nom}} </td>
-                      <td>{{item.id_Souscat?.prix}}$</td>
-                      <td>{{item.nombre}}</td>
-                      <td>
-                        <button class="btn btn-edit" (click)="nav(item._id, item.nombre, item.id_Souscat._id)">Modifier</button>
-                        <button class="btn btn-delete">Supprimer</button>
-                      </td>
-                    </tr>
-                    
-                    
-                  </tbody>
-                </table>
-              </div>
-  
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
+    <button class="btn-add" (click)="openCreateModal()">
+      <i class="ti ti-plus"></i> Ajouter Stock
+    </button>
   </div>
-  
-  
-  
-  
-  
+  <hr>
 
+  <div class="booking-form">
+    <div class="form-header">
+      <h6 class="title-centered">Liste Stock</h6>
+    </div>
 
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && stocks.length === 0">
+      <i class="ti ti-box"></i>
+      <h3>Aucun stock</h3>
+      <p>Cliquez sur "Ajouter Stock" pour commencer.</p>
+    </div>
 
+    <!-- Table -->
+    <div class="table-responsive" *ngIf="stocks.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Sous-catégorie</th>
+            <th>Prix</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of stocks; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.id_Souscat?.nom }}</td>
+            <td>{{ item.id_Souscat?.prix }} DH</td>
+            <td>{{ item.nombre }}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action btn-edit" (click)="openEditModal(item)" title="Modifier">
+                  <i class="ti ti-edit"></i>
+                </button>
+                <button class="btn-action btn-delete" (click)="deleteStock(item._id)" title="Supprimer">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
+<!-- Modal Stock -->
+<div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="stockModalLabel">
+          {{ isEditMode ? 'Modifier le stock' : 'Ajouter un stock' }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="stockForm">
+          <div class="form-group">
+            <label class="form-label" for="nombre">Quantité</label>
+            <input class="form-control" type="number" id="nombre" formControlName="nombre" placeholder="Ex: 10, 50...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="id_Souscat">Sous-catégorie</label>
+            <select class="form-control" id="id_Souscat" formControlName="id_Souscat">
+              <option value="" selected hidden>Sélectionner une sous-catégorie</option>
+              <option *ngFor="let item of sousCathegories" [value]="item._id">{{ item.nom }}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel-modal" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn-submit-modal" (click)="validation($event)">
+          {{ isEditMode ? 'Modifier' : 'Créer' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100">
+  <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="successToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+  <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="errorToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
