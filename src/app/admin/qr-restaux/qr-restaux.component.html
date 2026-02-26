@@ -22,10 +22,14 @@
     </div>
 
     <div class="qr-container" *ngIf="!loading">
-      <div class="qr-card" *ngFor="let item of data">
+      <div class="qr-card" *ngFor="let item of data" [class.occupied]="item.etat !== 'libre'">
         <div class="qr-number">{{item.number}}</div>
         <div class="qr-image"><img [src]="item.qrCodeData" alt="QR {{item.number}}"></div>
         <div class="qr-label">Table <span>{{item.number}}</span></div>
+        <button class="etat-btn" [class.libre]="item.etat === 'libre'" [class.occuper]="item.etat !== 'libre'" (click)="toggleEtat(item)">
+          <i class="ti" [class.ti-lock-open]="item.etat === 'libre'" [class.ti-lock]="item.etat !== 'libre'"></i>
+          {{ item.etat === 'libre' ? 'Libre' : 'en_cours' }}
+        </button>
       </div>
     </div>
   </div>

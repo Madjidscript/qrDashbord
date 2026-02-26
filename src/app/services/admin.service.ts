@@ -91,6 +91,10 @@ export class AdminService {
     return this.http.post(this.api_url+"/admin/qrcode",body);
   }
 
+  LibererQr(number: number, body: any) {
+    return this.http.patch(this.api_url+`/admin/libererqr/${number}`, body);
+  }
+
   updatestatut(body:any) {
     return this.http.post(this.api_url+"/admin/updatestatut",body);
   }

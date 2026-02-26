@@ -72,6 +72,18 @@ export class QrRestauxComponent implements OnInit {
     });
   }
 
+  toggleEtat(item: any) {
+    const nouvelEtat = item.etat === 'libre' ? 'en_cours' : 'libre';
+    this.api.LibererQr(item.number, { etat: nouvelEtat }).subscribe({
+      next: (data:any) => {
+        console.log("mon data", data.table.etat)
+        // item.etat = nouvelEtat;
+        item.etat = data.table.etat;
+      },
+      error: () => this.showErrorToast('Erreur lors de la mise à jour')
+    });
+  }
+
   showSuccessToast(message: string) {
     const body = document.getElementById('successToastBody');
     if (body) body.textContent = message;
